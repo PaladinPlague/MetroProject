@@ -2,10 +2,10 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class MyUndirectedGraph<T> implements ADTGraph<T> {
+public class UndirectedUnweightedGraph<T> implements ADTGraph<T> {
     final private Map<T, Set<T>> adjMatrix;
 
-    public MyUndirectedGraph() {
+    public UndirectedUnweightedGraph() {
         adjMatrix = new HashMap<>();
     }
 
@@ -54,7 +54,9 @@ public class MyUndirectedGraph<T> implements ADTGraph<T> {
 
     @Override
     public Set<T> getVerticesIf(Predicate<T> predicate) {
-        return adjMatrix.keySet().stream().filter(predicate).collect(Collectors.toSet());
+        return adjMatrix.keySet().stream()
+                .filter(predicate)
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -68,9 +70,16 @@ public class MyUndirectedGraph<T> implements ADTGraph<T> {
     }
 
     @Override
+    public Set<T> getAllVertices() {
+        return adjMatrix.keySet();
+    }
+
+    @Override
     public String toString() {
         return "Graph {" +
-                adjMatrix.entrySet().stream().map((entry) -> entry.getKey() + ":" + entry.getValue() + "\n\n").collect(Collectors.toList()) +
+                adjMatrix.entrySet().stream()
+                        .map((entry) -> entry.getKey() + ":" + entry.getValue() + "\n\n")
+                        .collect(Collectors.toList()) +
                 "}";
     }
 }

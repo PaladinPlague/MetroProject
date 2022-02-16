@@ -2,12 +2,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
+// TODO: add possibility of weights to the graph
 public interface ADTGraph<N> {
 
     boolean isEmpty();
 
     boolean isEdge(N vertex1, N vertex2);
-
 
     void addEdge(N vertex1, N vertex2);
 
@@ -22,4 +22,6 @@ public interface ADTGraph<N> {
     Set<N> getNeighboursOf(N vertex);
 
     List<N> findPath(N from, N to);
+
+    Set<N> getAllVertices();
 }

@@ -56,6 +56,10 @@ public class Station {
     public int getIndex() {
         return this.index;
     }
+
+    public String getName() {
+        return this.name;
+    }
 }
 
 enum Line {

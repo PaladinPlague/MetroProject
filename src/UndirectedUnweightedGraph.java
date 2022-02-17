@@ -4,9 +4,11 @@ import java.util.stream.Collectors;
 
 public class UndirectedUnweightedGraph<T> implements ADTGraph<T> {
     final private Map<T, Set<T>> adjMatrix;
+    final private SearchAlgo<T> searchAlgorithm;
 
-    public UndirectedUnweightedGraph() {
-        adjMatrix = new HashMap<>();
+    public UndirectedUnweightedGraph(SearchAlgo<T> searchAlgorithm) {
+        this.adjMatrix = new HashMap<>();
+        this.searchAlgorithm = searchAlgorithm;
     }
 
     @Override
@@ -66,16 +68,7 @@ public class UndirectedUnweightedGraph<T> implements ADTGraph<T> {
 
     @Override
     public List<T> findPath(T from, T to) {
-//        ? create a search interface and inject search implementation into the method
-//        var aStarSearch = new AStarSearch<T>();
-//
-//        if (to instanceof Station) {
-//
-//
-//            return aStarSearch.search(this, from, to, comparator);
-//        }
-
-        return null;
+        return this.searchAlgorithm.search(this, from, to);
     }
 
     @Override

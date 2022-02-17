@@ -1,6 +1,5 @@
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -10,12 +9,13 @@ public class Metro {
     final private ADTGraph<Station> graph;
 
     public Metro() {
-        this.graph = new UndirectedUnweightedGraph<>();
+        SearchAlgo<Station> searchAlgorithm = new StationHillClimbing();
+        this.graph = new UndirectedUnweightedGraph<>(searchAlgorithm);
         List<Station> stations = StationReader.readStations();
-        initGraph(stations);
+        initGraph(this.graph, stations);
     }
 
-    private void initGraph(Collection<Station> stations) {
+    private static void initGraph(ADTGraph<Station> graph, Collection<Station> stations) {
         // do two next operations separately to ensure that all vertices are inserted before inserting edges
 
         // add vertex to the graph.txt
@@ -28,40 +28,21 @@ public class Metro {
         });
     }
 
-//    void printGraph() {
-//        System.out.println(graph);
-//    }
-//
-//    private Station getStationById() {
-//        return graph.getVerticesIf(station -> station.getIndex() == 20).toArray(new Station[]{})[0];
-//    }
-
     public Station getStationByName(String name) {
-////        TODO: custom exception for when no stations with name exists
+//        TODO: custom exception for when no stations with name exists
         return graph.getVerticesIf(station -> station.getName().equals(name)).toArray(new Station[]{})[0];
     }
 
     public Collection<Station> getStations() {
-        return graph.getVerticesIf(station -> true);
+        return graph.getAllVertices();
     }
 
-    // ? Path object instead of list of strings
+    // ? Path object instead of list of stations
     public List<Station> getPath(String from, String to) {
         Station stationFrom = getStationByName(from);
         Station stationTo = getStationByName(to);
 //        TODO make it return an object that tells you which lines to take or when to change the line
-        var aStarSearch = new AStarSearch<Station>();
-        Comparator<Station> comparator = (Station o1, Station o2) -> {
-//            Station target = (Station) to;
-            var lines = stationTo.getLines();
-            for (var line: lines) {
-                if (o1.isLine(line)) {
-                    return 1;
-                }
-            }
-            return -1;
-        };
-        return aStarSearch.search(graph, stationFrom, stationTo, comparator);
+        return graph.findPath(stationFrom, stationTo);
     }
 
 

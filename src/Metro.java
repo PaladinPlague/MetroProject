@@ -1,5 +1,6 @@
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -49,7 +50,18 @@ public class Metro {
         Station stationFrom = getStationByName(from);
         Station stationTo = getStationByName(to);
 //        TODO make it return an object that tells you which lines to take or when to change the line
-        return graph.findPath(stationFrom, stationTo);
+        var aStarSearch = new AStarSearch<Station>();
+        Comparator<Station> comparator = (Station o1, Station o2) -> {
+//            Station target = (Station) to;
+            var lines = stationTo.getLines();
+            for (var line: lines) {
+                if (o1.isLine(line)) {
+                    return 1;
+                }
+            }
+            return -1;
+        };
+        return aStarSearch.search(graph, stationFrom, stationTo, comparator);
     }
 
 

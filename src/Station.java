@@ -36,7 +36,7 @@ public class Station {
         return "Station {" + "\n index=" + index + ",\n name='" + name + '\'' + ",\n lines=" + lines + "\n}";
     }
 
-    public Collection<Station> findNeighboursIn(Collection<Station> stations) {
+    Collection<Station> findNeighboursIn(Collection<Station> stations) {
         return connections.stream()
                 .filter((Integer connection) -> connection != 0) // filter the 0's out - starting stations
                 .map((Integer connection) -> findStationByIndex(connection, stations)) // map id's to stations
@@ -60,6 +60,8 @@ public class Station {
     public String getName() {
         return this.name;
     }
+
+    public Set<Line> getLines() { return lines; }
 }
 
 enum Line {

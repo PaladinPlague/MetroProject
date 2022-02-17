@@ -66,6 +66,15 @@ public class UndirectedUnweightedGraph<T> implements ADTGraph<T> {
 
     @Override
     public List<T> findPath(T from, T to) {
+//        ? create a search interface and inject search implementation into the method
+//        var aStarSearch = new AStarSearch<T>();
+//
+//        if (to instanceof Station) {
+//
+//
+//            return aStarSearch.search(this, from, to, comparator);
+//        }
+
         return null;
     }
 

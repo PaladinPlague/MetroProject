@@ -1,8 +1,5 @@
-
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Backend Layer over the graphADT class
@@ -11,8 +8,8 @@ public class Metro {
     final private ADTGraph<Station> graph;
 
     public Metro() {
-        this.graph = new StationsGraph();
         List<Station> stations = StationReader.readStations();
+        this.graph = new StationsGraph();
         initGraph(this.graph, stations);
     }
 
@@ -45,6 +42,4 @@ public class Metro {
 //        TODO make it return an object that tells you which lines to take or when to change the line
         return graph.findPath(stationFrom, stationTo);
     }
-
-
 }

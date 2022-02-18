@@ -63,7 +63,3 @@ public class Station {
 
     public Set<Line> getLines() { return lines; }
 }
-
-enum Line {
-    GREEN, RED, ORANGE, BLUE, GREENB, GREENC, GREEND, GREENE, MATTAPAN, REDA, REDB
-}

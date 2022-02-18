@@ -5,11 +5,11 @@ public class StationsGraph extends UndirectedUnweightedGraph<Station> {
 
     @Override
     public List<Station> findPath(Station from, Station to) {
-        HillClimbing<Station> searchAlgorithm = new HillClimbing<>(
-                (o1, target) -> {
+        SearchAlgo<Station> searchAlgorithm = new HillClimbing<>(
+                (target, station) -> {
                     Set<Line> lines = target.getLines();
                     for (Line line : lines) {
-                        if (o1.isLine(line)) {
+                        if (station.isLine(line)) {
                             return 1;
                         }
                     }

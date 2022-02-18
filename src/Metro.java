@@ -1,6 +1,8 @@
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Backend Layer over the graphADT class
@@ -9,8 +11,7 @@ public class Metro {
     final private ADTGraph<Station> graph;
 
     public Metro() {
-        SearchAlgo<Station> searchAlgorithm = new StationHillClimbing();
-        this.graph = new UndirectedUnweightedGraph<>(searchAlgorithm);
+        this.graph = new StationsGraph();
         List<Station> stations = StationReader.readStations();
         initGraph(this.graph, stations);
     }

@@ -2,13 +2,13 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class UndirectedUnweightedGraph<T> implements ADTGraph<T> {
+// Class for undirected, unweighted graphs
+// need to implement the findPath method to work
+public abstract class UndirectedUnweightedGraph<T> implements ADTGraph<T> {
     final private Map<T, Set<T>> adjMatrix;
-    final private SearchAlgo<T> searchAlgorithm;
 
-    public UndirectedUnweightedGraph(SearchAlgo<T> searchAlgorithm) {
+    public UndirectedUnweightedGraph() {
         this.adjMatrix = new HashMap<>();
-        this.searchAlgorithm = searchAlgorithm;
     }
 
     @Override
@@ -67,9 +67,7 @@ public class UndirectedUnweightedGraph<T> implements ADTGraph<T> {
     }
 
     @Override
-    public List<T> findPath(T from, T to) {
-        return this.searchAlgorithm.search(this, from, to);
-    }
+    abstract public List<T> findPath(T from, T to);
 
     @Override
     public Set<T> getAllVertices() {

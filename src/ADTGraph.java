@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -17,7 +18,7 @@ public interface ADTGraph<N> {
 
     boolean removeVertex(N vertex);
 
-    Set<N> getVerticesIf(Predicate<N> predicate);
+    Set<N> getVerticesIf(Predicate<N> predicate) throws NoSuchElementException;
 
     Set<N> getNeighboursOf(N vertex);
 

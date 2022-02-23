@@ -2,20 +2,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+/**
+ * Class responsible for reading in stations from the provided file
+ */
 public class StationReader {
-    public static List<Station> readStations() {
+    public static List<Station> readStations(String filename) throws FileNotFoundException {
         List<Station> stations = new ArrayList<>();
-        try {
-            File file = new File("bostonmetro.txt");
+            File file = new File(filename);
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine().strip();
                 Station station = createStationFromString(line);
                 stations.add(station);
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
         return stations;
     }
 

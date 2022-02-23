@@ -1,17 +1,80 @@
-import java.util.Collection;
+import java.util.List;
 
 public interface View {
 
-//  in this method you should display the ui
+    // In this method you should set up and display the UI
+
+    /**
+     * Call this method to run the UI
+     */
     void start();
 
-//  with setUp<SomeAction> methods, we will set up callbacks
-//  depending on the framework we might need to change the type of the argument
-    void setUpOnDisplayGraphClick(Runnable onNodes);
+    // With setUpOn<SomeAction> methods, we will set up callbacks to be executed
+    // when <SomeAction> happens - for example:
+    // when a button is pressed a path between two stations is calculated and
+    // displayed to the user.
+    // depending on the framework we might need to change Runnable to something else
 
-//  utility methods for the view - in order to separate backend and front end
-//  we should agree on one data class for transferring information about stations
-//  this one probably contains too much info
-    void displayStations(Collection<String> nodes);
+    /**
+     * Call this method to set up onDisplayGraph callback
+     * onDisplayGraph will be called when displayGraph action is called from the UI
+     *
+     * @param OnDisplayGraph action to be run when displayGraph is called from the UI
+     */
+    void setUpOnDisplayGraph(Runnable OnDisplayGraph);
+
+    /**
+     * Call this method to set up onFindPath
+     *
+     * @param onFindPath action to be run when findPath is called from the UI
+     */
+    void setUpOnFindPath(Runnable onFindPath);
+
+    /**
+     * Call this method to set up onGetLine
+     *
+     * @param onGetLine action to be run when getLine is called from the UI
+     */
+    void setUpOnGetLine(Runnable onGetLine);
+
+    // Getter methods - you call these to get the values from the UI
+
+    /**
+     * Call to get two stations that should be passed to the backend to find path between
+     *
+     * @return array of two string, representing the names of stations.
+     * Index 0 should be the starting stations, index 1 should be the destination station
+     */
+    String[] getStationsForPathFinding();
+
+    /**
+     * Call to get a name of the station which should be passed to the backend to find
+     * this stations lines
+     * @return string which represents the name of the station which you want to find the line of
+     */
+    String getStationForWhichLine();
+
+    // Display methods for the view
+
+    /**
+     * Call to tell the UI to display given list of stations
+     * @param stations List of StationData to be displayed
+     */
+    void displayStations(List<StationData> stations);
+
+    /**
+     * Call to tell the UI to display given list of stations
+     * representing the path between first and last of the elements of this path
+     * @param path List of StationData, representing path from first element to the last element of this list
+     */
+    void displayPath(List<StationData> path);
+
+    /**
+     * Call to alert the UI with message.
+     * For example: when an exception is thrown in the system, call this method to inform the user
+     * @param message the message that the ui should display
+     */
+    void alert(String message);
+
 
 }

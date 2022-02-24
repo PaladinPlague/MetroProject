@@ -76,6 +76,6 @@ public class ConsoleView implements View {
 
     @Override
     public void displayPath(List<StationData> path) {
-
+        path.forEach(System.out::println);
     }
 }

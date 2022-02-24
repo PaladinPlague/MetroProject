@@ -4,7 +4,7 @@ import java.util.*;
  * Facade for the backend layer over the graphADT classs
  */
 public class Metro {
-    final private StationsGraph graph;
+    final private ADTGraph<Station> graph;
 
     /**
      * Constructor
@@ -65,9 +65,7 @@ public class Metro {
         Station stationTo = getStationByName(to);
 //        TODO make it return an object that tells you which lines to take or when to change the line
 //        TODO: filter lines that are relevant to the path
-        var path = graph.findPath(stationFrom, stationTo);
-        Collections.reverse(path);
-        return path;
+        return graph.findPath(stationFrom, stationTo);
 
     }
 }

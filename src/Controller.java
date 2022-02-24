@@ -1,6 +1,5 @@
 import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Controller implements Runnable {
@@ -32,7 +31,7 @@ public class Controller implements Runnable {
             // TODO: assert that stations from the UI match those from the backend
 
             // start the ui
-            view.start();
+             view.start();
         } catch (FileNotFoundException e) {
             System.out.println("ERROR READING IN DATA");
             System.exit(1);
@@ -52,13 +51,13 @@ public class Controller implements Runnable {
 
         view.setUpOnFindPath(() -> {
             String[] stations = view.getStationsForPathFinding();
-            var from = stations[0];
-            var to = stations[1];
+            String from = stations[0];
+            String to = stations[1];
             if (from == null || to == null) {
                 view.alert("Please provide the names of the stations");
             } else {
                 try {
-                    var path = metro.getPath(from, to).stream()
+                    List<StationData> path = metro.getPath(from, to).stream()
                             .map(Controller::toStationData)
                             .collect(Collectors.toList());
                     view.displayPath(path);
@@ -69,9 +68,9 @@ public class Controller implements Runnable {
         });
 
         view.setUpOnGetLine(() -> {
-            var stationName = view.getStationForWhichLine();
+            String stationName = view.getStationForWhichLine();
             try {
-                var lines = metro.getStationByName(stationName).getLines();
+                Set<Line> lines = metro.getStationByName(stationName).getLines();
                 view.alert(lines.toString());
             } catch (NoSuchElementException e) {
                 view.alert("No Stations with this name exist in the system");
@@ -83,11 +82,12 @@ public class Controller implements Runnable {
 
     /**
      * Convert Backend Station class to UI StationData class
+     *
      * @param station Station that is to be converted
      * @return StationData object representing Station passed in
      */
     private static StationData toStationData(Station station) {
-        var stationName = station.getName();
+        String stationName = station.getName();
         List<String> lines = station.getLines().stream().map(Enum::toString).collect(Collectors.toList());
         return new StationData(stationName, lines);
     }

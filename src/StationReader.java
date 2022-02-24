@@ -8,13 +8,14 @@ import java.util.*;
 public class StationReader {
     public static List<Station> readStations(String filename) throws FileNotFoundException {
         List<Station> stations = new ArrayList<>();
-            File file = new File(filename);
-            Scanner scanner = new Scanner(file);
+        File file = new File(filename);
+        try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine().strip();
                 Station station = createStationFromString(line);
                 stations.add(station);
             }
+        }
         return stations;
     }
 

@@ -1,7 +1,9 @@
+package View;
+
 import java.util.*;
 
 // example class, this is not final implementation
-public class ConsoleView implements View {
+public class ConsoleView implements MetroView {
 
     private final Scanner inputReader;
     private final Map<String, Runnable> commands;

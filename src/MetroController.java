@@ -1,39 +1,45 @@
+import Model.Metro;
+import Model.Station;
+import View.ConsoleView;
+import View.MetroView;
+import View.StationData;
+
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-public class Controller implements Runnable {
+public class MetroController implements Runnable {
 
-    final static String FILENAME = "bostonmetro.txt";
-
-    final View view;
+    final MetroView view;
     final Metro metro;
 
-    public Controller() {
-        this.view = new ConsoleView();
+    public MetroController() {
         this.metro = new Metro();
+        this.view = new ConsoleView();
     }
 
     public static void main(String[] args) {
-        Controller controller = new Controller();
+        MetroController controller = new MetroController();
         controller.run();
     }
 
     @Override
     public void run() {
         try {
-            // read in the stations
-            List<Station> stations = StationReader.readStations(FILENAME);
-            // pass them into the system and initialize it
-            metro.init(stations);
+            // initialise the backend
+            metro.init();
             // set up communication between model and view
             setUpView();
             // TODO: assert that stations from the UI match those from the backend
 
             // start the ui
-             view.start();
+            view.start();
         } catch (FileNotFoundException e) {
-            System.out.println("ERROR READING IN DATA");
+            System.out.println("FILE DOES NOT EXIST");
+            System.exit(1);
+        } catch (Exception e) {
+            System.out.println("ERROR READING DATA");
             System.exit(1);
         }
     }
@@ -44,7 +50,7 @@ public class Controller implements Runnable {
     private void setUpView() {
         view.setUpOnDisplayGraph(() -> {
             List<StationData> stations = metro.getStations().stream()
-                    .map(Controller::toStationData)
+                    .map(MetroController::toStationData)
                     .collect(Collectors.toList());
             view.displayStations(stations);
         });
@@ -58,7 +64,7 @@ public class Controller implements Runnable {
             } else {
                 try {
                     List<StationData> path = metro.getPath(from, to).stream()
-                            .map(Controller::toStationData)
+                            .map(MetroController::toStationData)
                             .collect(Collectors.toList());
                     view.displayPath(path);
                 } catch (NoSuchElementException e) {
@@ -70,21 +76,18 @@ public class Controller implements Runnable {
         view.setUpOnGetLine(() -> {
             String stationName = view.getStationForWhichLine();
             try {
-                Set<Line> lines = metro.getStationByName(stationName).getLines();
-                view.alert(lines.toString());
+                view.alert(metro.getStationByName(stationName).getLines().toString());
             } catch (NoSuchElementException e) {
                 view.alert("No Stations with this name exist in the system");
             }
         });
-
-
     }
 
     /**
-     * Convert Backend Station class to UI StationData class
+     * Convert Backend Model.Station class to UI View.StationData class
      *
-     * @param station Station that is to be converted
-     * @return StationData object representing Station passed in
+     * @param station Model.Station that is to be converted
+     * @return View.StationData object representing Model.Station passed in
      */
     private static StationData toStationData(Station station) {
         String stationName = station.getName();

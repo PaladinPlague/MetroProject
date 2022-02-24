@@ -1,3 +1,5 @@
+package Model;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -5,7 +7,7 @@ import java.util.*;
 /**
  * Class responsible for reading in stations from the provided file
  */
-public class StationReader {
+class StationReader {
     public static List<Station> readStations(String filename) throws FileNotFoundException {
         List<Station> stations = new ArrayList<>();
         File file = new File(filename);

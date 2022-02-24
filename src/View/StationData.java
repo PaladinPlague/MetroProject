@@ -1,3 +1,5 @@
+package View;
+
 import java.util.List;
 
 public class StationData {
@@ -11,6 +13,6 @@ public class StationData {
 
     @Override
     public String toString() {
-        return "Station " + name + ", lines=" + line;
+        return "Model.Station " + name + ", lines=" + line;
     }
 }

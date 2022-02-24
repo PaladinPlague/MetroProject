@@ -1,3 +1,5 @@
+package GraphADT;
+
 import java.util.List;
 
 public interface SearchAlgo<T> {

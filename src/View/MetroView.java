@@ -1,6 +1,8 @@
+package View;
+
 import java.util.List;
 
-public interface View {
+public interface MetroView {
 
     // In this method you should set up and display the UI
 
@@ -58,14 +60,14 @@ public interface View {
 
     /**
      * Call to tell the UI to display given list of stations
-     * @param stations List of StationData to be displayed
+     * @param stations List of View.StationData to be displayed
      */
     void displayStations(List<StationData> stations);
 
     /**
      * Call to tell the UI to display given list of stations
      * representing the path between first and last of the elements of this path
-     * @param path List of StationData, representing path from first element to the last element of this list
+     * @param path List of View.StationData, representing path from first element to the last element of this list
      */
     void displayPath(List<StationData> path);
 

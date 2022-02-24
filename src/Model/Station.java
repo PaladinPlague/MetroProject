@@ -1,6 +1,7 @@
+package Model;
+
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,7 +35,7 @@ public class Station {
 
     @Override
     public String toString() {
-        return "Station {" + "\n index=" + index + ",\n name='" + name + '\'' + ",\n lines=" + lines + "\n}";
+        return "Model.Station {" + "\n index=" + index + ",\n name='" + name + '\'' + ",\n lines=" + lines + "\n}";
     }
 
     Collection<Station> findNeighboursIn(Collection<Station> stations) {

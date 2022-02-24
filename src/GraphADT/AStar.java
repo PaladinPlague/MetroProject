@@ -1,3 +1,5 @@
+package GraphADT;
+
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -5,19 +7,16 @@ import java.util.stream.Collectors;
 
 public class AStar<T> implements SearchAlgo<T> {
     // function where the first argument is the goal and second is the current node, which returns the heuristic of the current node to the goal
-    private final BiFunction<T, T, Integer> heuristicFunction;
+    private final BiFunction<T, T, Integer> heuristic;
     private final ADTGraph<T> graph;
 
-    public AStar(BiFunction<T, T, Integer> simpleHeuristic, ADTGraph<T> graph) {
-        this.heuristicFunction = simpleHeuristic;
+    public AStar(BiFunction<T, T, Integer> heuristic, ADTGraph<T> graph) {
+        this.heuristic = heuristic;
         this.graph = graph;
     }
 
     @Override
     public List<T> search(T from, T to) {
-
-        final Function<T, Integer> getHeuristic = (station) -> this.heuristicFunction.apply(to, station);
-
         final PriorityQueue<Node<T>> agenda = new PriorityQueue<>(
                 Comparator.comparingInt(o -> o.getF() + o.getCost())
         );
@@ -27,7 +26,7 @@ public class AStar<T> implements SearchAlgo<T> {
         agenda.add(new Node<>(from, 0, 0, null));
 
         while (agenda.peek() != null) {
-            Node<T> current = agenda.poll();
+            final Node<T> current = agenda.poll();
 
             if (current.getValue() == to) {
                 List<T> path = getPath(current).stream().map(Node::getValue).collect(Collectors.toList());
@@ -37,7 +36,8 @@ public class AStar<T> implements SearchAlgo<T> {
 
             visited.add(current);
 
-            Set<Node<T>> neighbours = graph.getNeighboursOf(current.getValue()).stream()
+            final Function<T, Integer> getHeuristic = (station) -> this.heuristic.apply(to, station);
+            final Set<Node<T>> neighbours = graph.getNeighboursOf(current.getValue()).stream()
                     .map((neighbour) -> new Node<>(neighbour, current.getCost() + 1, getHeuristic.apply(neighbour), current))
                     .collect(Collectors.toSet());
 
@@ -51,8 +51,8 @@ public class AStar<T> implements SearchAlgo<T> {
     }
 
     private List<Node<T>> getPath(Node<T> parent) {
+        final List<Node<T>> result = new ArrayList<>();
         Node<T> current = parent;
-        List<Node<T>> result = new ArrayList<>();
         while (current != null) {
             result.add(current);
             current = current.getParent();
@@ -104,7 +104,7 @@ class Node<T> {
 
     @Override
     public String toString() {
-        return "Node{" +
+        return "GraphADT.Node{" +
                 ", value=" + value +
                 ", cost=" + cost +
                 ", f=" + f +

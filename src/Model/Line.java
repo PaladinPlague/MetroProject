@@ -1,5 +1,0 @@
-package Model;
-
-public enum Line {
-    GREEN, RED, ORANGE, BLUE, GREENB, GREENC, GREEND, GREENE, MATTAPAN, REDA, REDB
-}

@@ -19,14 +19,14 @@ public class Station {
     /**
      * Set of line that this station lies on/belongs to
      */
-    final private Set<Line> lines;
+    final private Set<String> lines;
 
     /**
      * set of adjacent Stations
      */
     final private Set<Integer> connections;
 
-    public Station(int index, String name, Set<Line> lines, Set<Integer> connections) {
+    public Station(int index, String name, Set<String> lines, Set<Integer> connections) {
         this.index = index;
         this.name = name;
         this.lines = lines;
@@ -35,9 +35,10 @@ public class Station {
 
     @Override
     public String toString() {
-        return "Model.Station {" + "\n index=" + index + ",\n name='" + name + '\'' + ",\n lines=" + lines + "\n}";
+        return "Station {" + "\n index=" + index + ",\n name='" + name + '\'' + ",\n lines=" + lines + "\n}";
     }
 
+    // TODO: remove this method
     Collection<Station> findNeighboursIn(Collection<Station> stations) {
         return connections.stream()
                 .filter((Integer connection) -> connection != 0) // filter the 0's out - starting stations
@@ -51,8 +52,8 @@ public class Station {
         ).findFirst().orElseThrow();
     }
 
-    public boolean isLine(Line line) {
-        return lines.contains(line);
+    public boolean isLine(String line) {
+        return lines.contains(line.toUpperCase());
     }
 
     public int getIndex() {
@@ -63,7 +64,9 @@ public class Station {
         return this.name;
     }
 
-    public Set<Line> getLines() { return lines; }
+    public Set<String> getLines() {
+        return lines;
+    }
 
     @Override
     public boolean equals(Object o) {

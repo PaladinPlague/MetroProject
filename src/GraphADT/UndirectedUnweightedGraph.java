@@ -24,6 +24,20 @@ public abstract class UndirectedUnweightedGraph<T> implements ADTGraph<T> {
         return adjMatrix.containsKey(vertex1) && adjMatrix.get(vertex1).contains(vertex2);
     }
 
+    @Override
+    public Integer getWeightOfEdge(T vertex1, T vertex2) {
+        return null;
+    }
+
+    @Override
+    public Set<T> getOutgoing(T vertex) {
+        return getNeighboursOf(vertex);
+    }
+
+    @Override
+    public Set<T> getIngoing(T vertex) {
+        return getNeighboursOf(vertex);
+    }
 
     @Override
     public void addEdge(T vertex1, T vertex2) {
@@ -31,6 +45,11 @@ public abstract class UndirectedUnweightedGraph<T> implements ADTGraph<T> {
         addVertex(vertex2);
         adjMatrix.get(vertex1).add(vertex2);
         adjMatrix.get(vertex2).add(vertex1);
+    }
+
+    @Override
+    public boolean isVertex(T vertex) {
+        return !adjMatrix.containsKey(vertex);
     }
 
     @Override

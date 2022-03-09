@@ -1,37 +1,30 @@
 package Model;
 
-import GraphADT.ADTGraph;
-import GraphADT.AStar;
+import GraphADT.Expandable;
 import GraphADT.SearchAlgo;
 import GraphADT.UndirectedUnweightedGraph;
 
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.Set;
 
-class StationsGraph extends UndirectedUnweightedGraph<Station> {
+public class StationsGraph extends UndirectedUnweightedGraph<Station> implements Expandable<Station> {
 
     private final SearchAlgo<Station> searchAlgorithm;
 
     /**
-     *
-     * @param searchAlgoProvider
+     * @param searchAlgorithm the search algorithm to be used e.g. A*
      */
-    public StationsGraph(Function<ADTGraph<Station>, SearchAlgo<Station>> searchAlgoProvider) {
-        this.searchAlgorithm = searchAlgoProvider.apply(this);
-    }
-
-    /**
-     * Default constructor with a* algorithm for finding the path
-     */
-    public StationsGraph() {
-        final BiFunction<Station, Station, Integer> aStarHeuristic =
-                (target, station) -> target.getLines().stream().anyMatch(station::isLine) ? 0 : 1;
-        this.searchAlgorithm = new AStar<>(aStarHeuristic, this);
+    public StationsGraph(SearchAlgo<Station> searchAlgorithm) {
+        this.searchAlgorithm = searchAlgorithm;
     }
 
     @Override
     public List<Station> findPath(Station from, Station to) {
-        return searchAlgorithm.search(from, to);
+        return searchAlgorithm.searchIn(this, from, to);
+    }
+
+    @Override
+    public Set<Station> expand(Station from) {
+        return getOutgoing(from);
     }
 }

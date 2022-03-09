@@ -26,12 +26,12 @@ class StationReader {
 
         int index = Integer.parseInt(data[0]);
         String name = data[1];
-        Set<Line> lines = new HashSet<>();
+        Set<String> lines = new HashSet<>();
         Set<Integer> connections = new HashSet<>();
 
         for (int current = 2; current < data.length; current += 3) {
             String metroLineString = data[current];
-            Line metroLine = Line.valueOf(metroLineString.toUpperCase());
+            String metroLine = metroLineString.toUpperCase();
             lines.add(metroLine);
             var conn1 = Integer.parseInt(data[current + 1]);
             var conn2 = Integer.parseInt(data[current + 2]);

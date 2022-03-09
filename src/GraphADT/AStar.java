@@ -8,15 +8,13 @@ import java.util.stream.Collectors;
 public class AStar<T> implements SearchAlgo<T> {
     // function where the first argument is the goal and second is the current node, which returns the heuristic of the current node to the goal
     private final BiFunction<T, T, Integer> heuristic;
-    private final ADTGraph<T> graph;
 
-    public AStar(BiFunction<T, T, Integer> heuristic, ADTGraph<T> graph) {
+    public AStar(BiFunction<T, T, Integer> heuristic) {
         this.heuristic = heuristic;
-        this.graph = graph;
     }
 
     @Override
-    public List<T> search(T from, T to) {
+    public List<T> searchIn(Expandable<T> graph,T from, T to) {
         final PriorityQueue<Node<T>> agenda = new PriorityQueue<>(
                 Comparator.comparingInt(o -> o.getF() + o.getCost())
         );
@@ -37,7 +35,7 @@ public class AStar<T> implements SearchAlgo<T> {
             visited.add(current);
 
             final Function<T, Integer> getHeuristic = (station) -> this.heuristic.apply(to, station);
-            final Set<Node<T>> neighbours = graph.getNeighboursOf(current.getValue()).stream()
+            final Set<Node<T>> neighbours = graph.expand(current.getValue()).stream()
                     .map((neighbour) -> new Node<>(neighbour, current.getCost() + 1, getHeuristic.apply(neighbour), current))
                     .collect(Collectors.toSet());
 

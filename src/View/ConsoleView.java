@@ -1,6 +1,7 @@
 package View;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 // example class, this is not final implementation
 public class ConsoleView implements MetroView {
@@ -47,12 +48,12 @@ public class ConsoleView implements MetroView {
     }
 
     @Override
-    public String[] getStationsForPathFinding() {
+    public Integer[] getStationsForPathFinding() {
         System.out.println(">> Please input a starting stations name: \n");
-        String start = inputReader.nextLine();
+        int start = Integer.parseInt(inputReader.nextLine());
         System.out.println(">> Please input a destination stations name: \n");
-        String end = inputReader.nextLine();
-        return new String[]{start, end};
+        int end = Integer.parseInt(inputReader.nextLine());
+        return new Integer[]{start, end};
     }
 
     @Override
@@ -61,23 +62,25 @@ public class ConsoleView implements MetroView {
     }
 
     @Override
-    public void setUpOnGetLine(Runnable onGetLine) {
+    public void setUpOnGetLines(Runnable onGetLine) {
         commands.put("lines", onGetLine);
     }
 
     @Override
-    public String getStationForWhichLine() {
+    public Integer getStationForWhichLine() {
         System.out.println(">> Please input stations name: \n");
-        return inputReader.nextLine();
+        return Integer.parseInt(inputReader.nextLine());
     }
 
     @Override
-    public void displayStations(List<StationData> stations) {
-        stations.forEach(System.out::println);
+    public void displayStations(Map<Integer, String> stations, Map<Integer, Set<String>> lines) {
+        assert stations.keySet() == lines.keySet();
+        stations.keySet().forEach(index -> System.out.println(index + ". " + stations.get(index) + ", which is on lines: " + lines.get(index)));
     }
 
     @Override
-    public void displayPath(List<StationData> path) {
-        path.forEach(System.out::println);
+    public void displayPath(List<String> path, List<Set<String>> lines) {
+        assert path.size() == lines.size();
+        IntStream.range(0, path.size()).forEach(index -> System.out.println(index + ". " + path.get(index) + ", which is on lines: " + lines.get(index)));
     }
 }

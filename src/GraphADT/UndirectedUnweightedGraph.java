@@ -6,11 +6,13 @@ import java.util.stream.Collectors;
 
 // Class for undirected, unweighted graphs
 // need to implement the findPath method to work
-public abstract class UndirectedUnweightedGraph<T> implements ADTGraph<T> {
+public class UndirectedUnweightedGraph<T> implements ADTGraph<T> {
     final private Map<T, Set<T>> adjMatrix;
+    private final SearchAlgo<T> searchAlgorithm;
 
-    public UndirectedUnweightedGraph() {
+    public UndirectedUnweightedGraph(SearchAlgo<T> searchAlgorithm) {
         this.adjMatrix = new HashMap<>();
+        this.searchAlgorithm = searchAlgorithm;
     }
 
     @Override
@@ -87,12 +89,14 @@ public abstract class UndirectedUnweightedGraph<T> implements ADTGraph<T> {
         return adjMatrix.get(vertex);
     }
 
-//    @Override
-//    abstract public List<T> findPath(T from, T to);
-
     @Override
     public Set<T> getAllVertices() {
         return adjMatrix.keySet();
+    }
+
+    @Override
+    public List<T> findPath(T from, T to) {
+        return searchAlgorithm.searchIn(this, from, to);
     }
 
     @Override

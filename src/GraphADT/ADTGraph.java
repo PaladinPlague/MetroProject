@@ -1,5 +1,6 @@
 package GraphADT;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -27,13 +28,11 @@ public interface ADTGraph<T> {
 
     Set<T> getNeighboursOf(T vertex);
 
-//    List<N> findPath(N from, N to);
+    List<T> findPath(T from, T to);
 
     Set<T> getOutgoing(T vertex);
 
     Set<T> getIngoing(T vertex);
 
     Set<T> getAllVertices();
-
-    Integer searchHeuristic();
 }

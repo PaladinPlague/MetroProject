@@ -87,8 +87,8 @@ public abstract class UndirectedUnweightedGraph<T> implements ADTGraph<T> {
         return adjMatrix.get(vertex);
     }
 
-    @Override
-    abstract public List<T> findPath(T from, T to);
+//    @Override
+//    abstract public List<T> findPath(T from, T to);
 
     @Override
     public Set<T> getAllVertices() {

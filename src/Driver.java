@@ -14,10 +14,10 @@ public class Driver {
         // final BiFunction<Station, Station, Integer> aStarHeuristic = (target, station) -> target.getLines().stream().anyMatch(station::isLine) ? 0 : 1;
         final AStarStationHeuristic aStarHeuristic = new AStarStationHeuristic();
         final AStar<Station> aStar = new AStar<>(aStarHeuristic);
-        final StationsGraph stationsGraph = new StationsGraph(aStar);
+        final StationsGraph stationsGraph = new StationsGraph();
 
         // init dependencies
-        final Metro metro = new Metro(stationsGraph);
+        final Metro metro = new Metro(stationsGraph, aStar);
         final MetroView view = new ConsoleView();
 
         final MetroController controller = new MetroController(view, metro);

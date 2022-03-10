@@ -1,38 +1,39 @@
 package GraphADT;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Predicate;
 
 // TODO: add possibility of weights to the graph
-public interface ADTGraph<N> {
+public interface ADTGraph<T> {
 
     boolean isEmpty();
 
-    boolean isEdge(N vertex1, N vertex2);
+    boolean isEdge(T vertex1, T vertex2);
 
-    boolean isVertex(N vertex);
+    boolean isVertex(T vertex);
 
-    void addEdge(N vertex1, N vertex2);
+    void addEdge(T vertex1, T vertex2);
 
-    void addVertex(N vertex);
+    void addVertex(T vertex);
 
-    void removeEdge(N vertex1, N vertex2);
+    void removeEdge(T vertex1, T vertex2);
 
-    boolean removeVertex(N vertex);
+    boolean removeVertex(T vertex);
 
-    Integer getWeightOfEdge(N vertex1, N vertex2);
+    Integer getWeightOfEdge(T vertex1, T vertex2);
 
-    Set<N> getVerticesIf(Predicate<N> predicate) throws NoSuchElementException;
+    Set<T> getVerticesIf(Predicate<T> predicate) throws NoSuchElementException;
 
-    Set<N> getNeighboursOf(N vertex);
+    Set<T> getNeighboursOf(T vertex);
 
-    List<N> findPath(N from, N to);
+//    List<N> findPath(N from, N to);
 
-    Set<N> getOutgoing(N vertex);
+    Set<T> getOutgoing(T vertex);
 
-    Set<N> getIngoing(N vertex);
+    Set<T> getIngoing(T vertex);
 
-    Set<N> getAllVertices();
+    Set<T> getAllVertices();
+
+    Integer searchHeuristic();
 }

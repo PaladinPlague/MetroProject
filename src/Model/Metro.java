@@ -1,6 +1,7 @@
 package Model;
 
 import GraphADT.ADTGraph;
+import GraphADT.SearchAlgo;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 public class Metro {
     final static String FILENAME = "bostonmetro.txt";
     final private ADTGraph<Station> graph;
+    final private SearchAlgo<Station> searchAlgo;
 
     /**
      * No argument constructor
@@ -29,8 +31,9 @@ public class Metro {
      *
      * @param graph the initial state of the systems graph
      */
-    public Metro(ADTGraph<Station> graph) {
+    public Metro(ADTGraph<Station> graph, SearchAlgo<Station> searchAlgo) {
         this.graph = graph;
+        this.searchAlgo = searchAlgo;
     }
 
     /**
@@ -120,7 +123,8 @@ public class Metro {
         Station stationTo = getStationByIndex(to);
 //        TODO make it return an object that tells you which lines to take or when to change the line
 //        TODO: filter lines that are relevant to the path
-        final List<Station> path = graph.findPath(stationFrom, stationTo);
+
+        final List<Station> path = searchAlgo.searchIn(graph, stationFrom, stationTo); //graph.findPath(stationFrom, stationTo);
         return path.stream().map(Station::getIndex).collect(Collectors.toList());
     }
 }

@@ -1,15 +1,16 @@
-import GraphADT.*;
-import Model.AStarStationHeuristic;
+import GraphADT.ADTGraph;
+import GraphADT.SearchAlgo;
+import GraphADT.UndirectedUnweightedGraph;
 import Model.Metro;
 import Model.Station;
+import Model.StationAStarSearch;
 import View.ConsoleView;
 import View.MetroView;
 
 public class Driver {
     public static void main(String[] args) {
         // set up dependencies
-        final AStartHeuristic<Station> aStarHeuristic = new AStarStationHeuristic();
-        final SearchAlgo<Station> aStar = new AStar<>(aStarHeuristic);
+        final SearchAlgo<Station> aStar = new StationAStarSearch();
         final ADTGraph<Station> stationsGraph = new UndirectedUnweightedGraph<>(aStar);
 
         // init dependencies

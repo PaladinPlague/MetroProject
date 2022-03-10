@@ -63,7 +63,9 @@ public class MetroController implements Runnable {
                     Integer from = stations[0];
                     Integer to = stations[1];
                     List<Integer> path = metro.getPath(from, to);
+                    // get names of the stations in order
                     List<String> names = path.stream().map(metro::getStationNameByIndex).collect(Collectors.toList());
+                    // get lines of the stations in order
                     List<Set<String>> lines = path.stream().map(metro::getLinesByIndex).collect(Collectors.toList());
                     view.displayPath(names, lines);
                 } catch (NoSuchElementException e) {

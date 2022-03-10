@@ -1,19 +1,12 @@
 package GraphADT;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class AStar<T> implements SearchAlgo<T> {
-    // function where the first argument is the goal and second is the current node, which returns the heuristic of the current node to the goal
-    private final AStartHeuristic<T> heuristic;
-
-    public AStar(AStartHeuristic<T> heuristic) {
-        this.heuristic = heuristic;
-    }
+public abstract class AStar<T> implements SearchAlgo<T> {
 
     @Override
-    public List<T> searchIn(ADTGraph<T> graph,T from, T to) {
+    public List<T> searchIn(ADTGraph<T> graph, T from, T to) {
         final PriorityQueue<Node<T>> agenda = new PriorityQueue<>(
                 Comparator.comparingInt(o -> o.getF() + o.getCost())
         );
@@ -33,9 +26,14 @@ public class AStar<T> implements SearchAlgo<T> {
 
             visited.add(current);
 
-            final Function<T, Integer> getHeuristic = (station) -> this.heuristic.apply(to, station);
             final Set<Node<T>> neighbours = graph.getOutgoing(current.getValue()).stream()
-                    .map((neighbour) -> new Node<>(neighbour, current.getCost() + 1, getHeuristic.apply(neighbour), current))
+                    .map(
+                            (neighbour) ->
+                                    new Node<>(
+                                            neighbour,
+                                            current.getCost() + graph.getWeightOfEdge(current.getValue(), neighbour),
+                                            getHeuristic(to, neighbour),
+                                            current))
                     .collect(Collectors.toSet());
 
             for (Node<T> neighbour : neighbours) {
@@ -68,6 +66,9 @@ public class AStar<T> implements SearchAlgo<T> {
                 .filter((node) -> current.getValue() == node.getValue())
                 .allMatch((node) -> current.getF() + current.getCost() < node.getF() + node.getCost());
     }
+
+
+    public abstract Integer getHeuristic(T goal, T current);
 }
 
 class Node<T> {

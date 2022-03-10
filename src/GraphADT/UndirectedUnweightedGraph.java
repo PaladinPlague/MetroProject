@@ -5,10 +5,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 // Class for undirected, unweighted graphs
-// need to implement the findPath method to work
 public class UndirectedUnweightedGraph<T> implements ADTGraph<T> {
     final private Map<T, Set<T>> adjMatrix;
     private final SearchAlgo<T> searchAlgorithm;
+
 
     public UndirectedUnweightedGraph(SearchAlgo<T> searchAlgorithm) {
         this.adjMatrix = new HashMap<>();
@@ -28,7 +28,7 @@ public class UndirectedUnweightedGraph<T> implements ADTGraph<T> {
 
     @Override
     public Integer getWeightOfEdge(T vertex1, T vertex2) {
-        return null;
+        return 1;
     }
 
     @Override

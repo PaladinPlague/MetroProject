@@ -24,7 +24,7 @@ public interface ADTGraph<T> {
 
     Integer getWeightOfEdge(T vertex1, T vertex2);
 
-    Set<T> getVerticesIf(Predicate<T> predicate) throws NoSuchElementException;
+    Set<T> getVerticesIf(Predicate<T> predicate);
 
     Set<T> getNeighboursOf(T vertex);
 

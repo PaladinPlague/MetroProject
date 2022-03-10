@@ -1,7 +1,6 @@
 package Model;
 
-import GraphADT.ADTGraph;
-import GraphADT.SearchAlgo;
+import GraphADT.*;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -16,19 +15,9 @@ public class Metro {
     final private ADTGraph<Station> graph;
 
     /**
-     * No argument constructor
-     * By calling this version of the constructor the system will not contain any stations
-     * and will use (default) A* algorithm
-     * To fill the system with stations use one init method's overrides
-     */
-//    public Metro() {
-//        this.graph = new StationsGraph();
-//    }
-
-    /**
      * Provide a graph to the system in this constructor to have control over the initial state of the system
      *
-     * @param graph the initial state of the systems graph
+     * @param graph the initial state of the systems graph, TODO should be empty / move instantiation here
      */
     public Metro(ADTGraph<Station> graph) {
         this.graph = graph;
@@ -63,16 +52,15 @@ public class Metro {
     }
 
     /**
-     * Use to look up a station in the system by its name
-     * Returns the station from the system, searching by its name. Case is ignored.
-     * If no station with provided name exists, the method throws NoSuchElementException.
+     * Use to look up a station in the system by its index
+     * Returns the station from the system, searching by its index.
+     * If no station with provided id exists, the method throws NoSuchElementException.
      *
-     * @param index index of the Model.Station
-     * @return Model.Station With that name from the graph
-     * @throws java.util.NoSuchElementException when station with that name doesn't exist
+     * @param index id of the Station
+     * @return Station with that id from the graph
+     * @throws java.util.NoSuchElementException when station with that id doesn't exist
      */
     private Station getStationByIndex(int index) throws NoSuchElementException {
-        // TODO: handle more than one
         return graph.getVerticesIf(station -> station.getIndex() == index).stream().findFirst().orElseThrow();
     }
 
@@ -81,6 +69,7 @@ public class Metro {
      *
      * @param index id of the station
      * @return Name of stations in the system with given id
+     * @throws java.util.NoSuchElementException when station with that id doesn't exist
      */
 
     public String getStationNameByIndex(Integer index) throws NoSuchElementException {
@@ -88,8 +77,7 @@ public class Metro {
     }
 
     /**
-     * Use to retrieve names of the stations in the system
-     *
+     * Use to retrieve names of all the stations in the system
      * @return Map from index to the name of station of all stations in the system
      */
     public Map<Integer, String> getStationsNames() {
@@ -97,29 +85,39 @@ public class Metro {
                 .stream().collect(Collectors.toMap(Station::getIndex, Station::getName));
     }
 
+    /**
+     * Use to retrieve lines of all the stations in the system
+     * @return Map from index to the set of lines of all the stations in the system
+     */
     public Map<Integer, Set<String>> getStationsLines() {
         return graph.getAllVertices()
                 .stream().collect(Collectors.toMap(Station::getIndex, Station::getLines));
     }
 
+    /**
+     * Use to retrieve lines of a station
+     * @param index id of the station in the system
+     * @return A set of lines of this station
+     * @throws java.util.NoSuchElementException when station with that id doesn't exist
+     */
     public Set<String> getLinesByIndex(Integer index) {
         return getStationByIndex(index).getLines();
     }
 
     /**
      * Use to find path between two stations
-     * If either or both of the station cannot be found by getStationByName,
+     * If either or both of the station cannot be found by getStationByIndex,
      * method will throw NoSuchElementException
      *
      * @param from Starting station name
      * @param to   Destination station name
      * @return List of Model.Station starting with from, and ending with to, representing the shortest path from "from" to "to" in the system.
      * returned Stations are in order. If no path exists null is returned
+     * @throws java.util.NoSuchElementException when station with either id doesn't exist
      */
     public List<Integer> getPath(int from, int to) {
         Station stationFrom = getStationByIndex(from);
         Station stationTo = getStationByIndex(to);
-//        TODO make it return an object that tells you which lines to take or when to change the line
 //        TODO: filter lines that are relevant to the path
 
         final List<Station> path = graph.findPath(stationFrom, stationTo);

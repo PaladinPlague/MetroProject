@@ -1,4 +1,10 @@
 import Model.Metro;
+<<<<<<< HEAD
+=======
+import Model.Station;
+import View.ConsoleView;
+import View.UIView;
+>>>>>>> [WIP]feat: implement basic UI
 import View.MetroView;
 
 import java.io.FileNotFoundException;

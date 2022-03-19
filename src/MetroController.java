@@ -26,7 +26,7 @@ public class MetroController implements Runnable {
             // set up communication between model and view
             setUpView();
             // TODO: assert that stations from the UI match those from the backend
-
+//
             // start the ui
             view.start();
         } catch (FileNotFoundException e) {
@@ -50,9 +50,7 @@ public class MetroController implements Runnable {
      * Initialize and set up callback - communication between UI and backend
      */
     private void setUpView() {
-        view.setUpOnDisplayGraph(() -> {
-            view.displayStations(metro.getStationsNames(), metro.getStationsLines());
-        });
+        view.setUpOnDisplayGraph(() -> view.displayStations(metro.getStationsNames(), metro.getStationsLines()));
 
         view.setUpOnFindPath(() -> {
             Integer[] stations = view.getStationsForPathFinding();
@@ -62,12 +60,10 @@ public class MetroController implements Runnable {
                 try {
                     Integer from = stations[0];
                     Integer to = stations[1];
-                    List<Integer> path = metro.getPath(from, to);
+                    Set<List<Integer>> paths = metro.getShortestPaths(from, to);
                     // get names of the stations in order
-                    List<String> names = path.stream().map(metro::getStationNameByIndex).collect(Collectors.toList());
-                    // get lines of the stations in order
-                    List<Set<String>> lines = path.stream().map(metro::getLinesByIndex).collect(Collectors.toList());
-                    view.displayPath(names, lines);
+                    Set<List<String>> names = paths.stream().map(path -> path.stream().map(metro::getStationNameByIndex).collect(Collectors.toList())).collect(Collectors.toSet());
+                    view.displayPath(names);
                 } catch (NoSuchElementException e) {
                     view.alert("Either one or both of the stations have a name that we couldn't find. Please check the names");
                 }

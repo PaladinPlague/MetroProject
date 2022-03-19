@@ -21,24 +21,48 @@ class StationReader {
         return stations;
     }
 
+    public static Map<Integer, Map<Integer, String>> readAdjacencies(String filename) throws FileNotFoundException {
+        Map<Integer, Map<Integer, String>> stations = new HashMap<>();
+        File file = new File(filename);
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine().strip();
+                String[] data = line.split("\\s+");
+                int index = Integer.parseInt(data[0]);
+                Map<Integer, String> adjacencyList = getAdjacencyList(data);
+                stations.put(index, adjacencyList);
+            }
+        }
+        return stations;
+    }
+
+    private static Map<Integer, String> getAdjacencyList(String[] data) {
+
+        Map<Integer, String> adjacencies = new HashMap<>();
+
+        for (int current = 2; current < data.length; current += 3) {
+            String metroLineString = data[current].toUpperCase();
+            var conn1 = Integer.parseInt(data[current + 1]);
+            var conn2 = Integer.parseInt(data[current + 2]);
+
+            if (conn1 != 0) {
+                adjacencies.put(conn1, metroLineString);
+
+            }
+            if (conn2 != 0) {
+                adjacencies.put(conn2, metroLineString);
+            }
+        }
+
+        return adjacencies;
+    }
+
     private static Station createStationFromString(String line) {
         String[] data = line.split("\\s+");
 
         int index = Integer.parseInt(data[0]);
         String name = data[1];
-        Set<String> lines = new HashSet<>();
-        Set<Integer> connections = new HashSet<>();
 
-        for (int current = 2; current < data.length; current += 3) {
-            String metroLineString = data[current];
-            String metroLine = metroLineString.toUpperCase();
-            lines.add(metroLine);
-            var conn1 = Integer.parseInt(data[current + 1]);
-            var conn2 = Integer.parseInt(data[current + 2]);
-            connections.add(conn1);
-            connections.add(conn2);
-        }
-
-        return new Station(index, name, lines, connections);
+        return new Station(index, name);
     }
 }

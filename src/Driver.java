@@ -1,20 +1,17 @@
-import GraphADT.ADTGraph;
-import GraphADT.SearchAlgo;
-import GraphADT.UndirectedUnweightedGraph;
+import GraphADT.*;
 import Model.Metro;
 import Model.Station;
-import Model.StationAStarSearch;
 import View.ConsoleView;
 import View.MetroView;
 
 public class Driver {
     public static void main(String[] args) {
         // set up dependencies
-        final SearchAlgo<Station> aStar = new StationAStarSearch();
-        final ADTGraph<Station> stationsGraph = new UndirectedUnweightedGraph<>(aStar);
+        final MultiGraphADT<Integer, UndirectedUnweightedColouredEdge<Integer>> stations = new UndirectedUnweightedMultiGraph<>();
+        final MultiGraphSearchAlgorithm<Integer, UndirectedUnweightedColouredEdge<Integer>> searchAlgorithm = new EppsteinsAlgorithm<>();
 
         // init dependencies
-        final Metro metro = new Metro(stationsGraph);
+        final Metro metro = new Metro(stations, searchAlgorithm);
         final MetroView view = new ConsoleView();
 
         final MetroController controller = new MetroController(view, metro);

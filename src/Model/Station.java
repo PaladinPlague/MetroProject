@@ -1,10 +1,5 @@
 package Model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 public class Station {
     /**
      * index of the station in the file
@@ -16,44 +11,14 @@ public class Station {
      */
     final private String name;
 
-    /**
-     * Set of line that this station lies on/belongs to
-     */
-    final private Set<String> lines;
-
-    /**
-     * set of adjacent Stations
-     */
-    final private Set<Integer> connections;
-
-    public Station(int index, String name, Set<String> lines, Set<Integer> connections) {
+    public Station(int index, String name) {
         this.index = index;
         this.name = name;
-        this.lines = lines;
-        this.connections = connections;
     }
 
     @Override
     public String toString() {
-        return "Station {" + "\n index=" + index + ",\n name='" + name + '\'' + ",\n lines=" + lines + "\n}";
-    }
-
-    // TODO: remove this method
-    Collection<Station> findNeighboursIn(Collection<Station> stations) {
-        return connections.stream()
-                .filter((Integer connection) -> connection != 0) // filter the 0's out - starting stations
-                .map((Integer connection) -> findStationByIndex(connection, stations)) // map id's to stations
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private Station findStationByIndex(Integer index, Collection<Station> stations) {
-        return stations.stream().filter(
-                station -> station.index == index
-        ).findFirst().orElseThrow();
-    }
-
-    public boolean isLine(String line) {
-        return lines.contains(line.toUpperCase());
+        return "Station {" + "\n index=" + index + ",\n name='" + name + "\n}";
     }
 
     public int getIndex() {
@@ -62,10 +27,6 @@ public class Station {
 
     public String getName() {
         return this.name;
-    }
-
-    public Set<String> getLines() {
-        return lines;
     }
 
     @Override

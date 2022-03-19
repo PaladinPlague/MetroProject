@@ -79,8 +79,9 @@ public class ConsoleView implements MetroView {
     }
 
     @Override
-    public void displayPath(List<String> path, List<Set<String>> lines) {
-        assert path.size() == lines.size();
-        IntStream.range(0, path.size()).forEach(index -> System.out.println(index + ". " + path.get(index) + ", which is on lines: " + lines.get(index)));
+    public void displayPath(Set<List<String>> paths) {
+//        assert path.size() == lines.size();
+//        IntStream.range(0, path.size()).forEach(index -> System.out.println(index + ". " + path.get(index) + ", which is on lines: " + lines.get(index)));
+        paths.forEach(path -> System.out.println(path + "\n"));
     }
 }

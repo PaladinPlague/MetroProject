@@ -1,8 +1,6 @@
 package GraphADT;
 
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class UndirectedUnweightedColouredEdge<T> implements Edge<T> {
     final private String colour;
@@ -14,8 +12,8 @@ public class UndirectedUnweightedColouredEdge<T> implements Edge<T> {
     }
 
     @Override
-    public Collection<T> getNodes() {
-        return nodes;
+    public List<T> getNodes() {
+        return new ArrayList<>(nodes);
     }
 
     @Override
@@ -29,7 +27,7 @@ public class UndirectedUnweightedColouredEdge<T> implements Edge<T> {
     }
 
     @Override
-    public int getCost() {
+    public int getWeight() {
         return 1;
     }
 
@@ -48,5 +46,13 @@ public class UndirectedUnweightedColouredEdge<T> implements Edge<T> {
     @Override
     public int hashCode() {
         return Objects.hash(colour, nodes);
+    }
+
+    @Override
+    public String toString() {
+        return "Edge {" +
+                "colour='" + colour + '\'' +
+                ", nodes=" + nodes +
+                '}';
     }
 }

@@ -1,18 +1,20 @@
 package GraphADT;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class UndirectedUnweightedMultiGraph<T, E extends Edge<T>> implements MultiGraphADT<T, E> {
+public class MultiGraph<T, E extends Edge<T>> implements GraphADT<T, E> {
 
-    // doesn't allow for duplicate edges
-    final private Set<E> edgeList;
+    final private List<E> edgeList;
     final private Set<T> vertices;
 
 
-    public UndirectedUnweightedMultiGraph() {
-        this.edgeList = new HashSet<>();
+    public MultiGraph() {
+        this.edgeList = new ArrayList<>();
         this.vertices = new HashSet<>();
     }
 
@@ -22,17 +24,17 @@ public class UndirectedUnweightedMultiGraph<T, E extends Edge<T>> implements Mul
     }
 
     @Override
-    public boolean isEdge(E edge) {
+    public boolean hasEdge(E edge) {
         return edgeList.contains(edge);
     }
 
     @Override
-    public boolean hasEdge(T v1, T v2) {
-        return edgeList.stream().anyMatch(e -> e.getNodes().equals(Set.of(v1, v2)));
+    public boolean hasEdgeBetween(T v1, T v2) {
+        return edgeList.stream().anyMatch(e -> e.getNodes().equals(List.of(v1, v2)));
     }
 
     @Override
-    public Integer getWeightOfEdge(E edge) {
+    public int getWeightOfEdge(E edge) {
         return 1;
     }
 
@@ -95,13 +97,18 @@ public class UndirectedUnweightedMultiGraph<T, E extends Edge<T>> implements Mul
     }
 
     @Override
+    public Set<E> getEdgesBetween(T v1, T v2) {
+        return edgeList.stream().filter(edge -> edge.getNodes().equals(List.of(v1, v2))).collect(Collectors.toSet());
+    }
+
+    @Override
     public Set<T> getAllVertices() {
         return vertices;
     }
 
     @Override
     public Set<E> getAllEdges() {
-        return edgeList;
+        return new HashSet<>(edgeList);
     }
 
 

@@ -74,7 +74,7 @@ public interface MetroView {
      *
      * @param path List of View.StationData, representing path from first element to the last element of this list
      */
-    void displayPath(Set<List<String>> path);
+    void displayPath(List<List<String>> path);
 
     /**
      * Call to alert the UI with message.

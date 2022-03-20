@@ -1,14 +1,13 @@
 package GraphADT;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface Edge<T> {
-    Collection<T> getNodes();
+    List<T> getNodes();
 
     boolean contains(T vertex);
 
     T getOther(T vertex);
 
-    int getCost();
-
+    int getWeight();
 }

@@ -12,22 +12,21 @@ import java.util.stream.Collectors;
  * Here configuration of the backend should take place - initialisation of anything that the backend will need
  */
 public class Metro {
-    final static String FILENAME = "bostonmetro.txt";
     /**
      * Graph representing the system
      */
-    final private MultiGraphADT<Integer, UndirectedUnweightedColouredEdge<Integer>> graph;
+    final private GraphADT<Integer, UndirectedUnweightedColouredEdge<Integer>> graph;
 
     /**
      * The algorithm which finds the shortest paths in the graph
      */
-    final private MultiGraphSearchAlgorithm<Integer, UndirectedUnweightedColouredEdge<Integer>> searchAlgorithm;
+    final private ShortestPathsAlgorithm<Integer, UndirectedUnweightedColouredEdge<Integer>> searchAlgorithm;
 
     /**
      * A map from index to station - does not hold state.
      * If the station exists in a graph, it should exist here, but if a station exists here it does not have to exist in the graph
      */
-    final private Map<Integer, Station> stations;
+    final private Map<Integer, String> stations;
 
     /**
      * Provide a graph to the system in this constructor to have control over the initial state of the system
@@ -35,7 +34,7 @@ public class Metro {
      * @param graph           the initial state of the systems graph, TODO should be empty / move instantiation here
      * @param searchAlgorithm the algorithm used to find all shortest paths in this multigraph
      */
-    public Metro(MultiGraphADT<Integer, UndirectedUnweightedColouredEdge<Integer>> graph, MultiGraphSearchAlgorithm<Integer, UndirectedUnweightedColouredEdge<Integer>> searchAlgorithm) {
+    public Metro(GraphADT<Integer, UndirectedUnweightedColouredEdge<Integer>> graph, ShortestPathsAlgorithm<Integer, UndirectedUnweightedColouredEdge<Integer>> searchAlgorithm) {
         this.graph = graph;
         this.searchAlgorithm = searchAlgorithm;
         this.stations = new HashMap<>();
@@ -46,31 +45,26 @@ public class Metro {
      *
      * @throws FileNotFoundException when file does not exist
      */
-    public void init() throws FileNotFoundException {
-        // read in the stations
-        final List<Station> stations = StationReader.readStations(FILENAME);
-        final Map<Integer, Station> map = stations.stream().collect(Collectors.toMap(Station::getIndex, s -> s));
-        final Map<Integer, Map<Integer, String>> adjacencies = StationReader.readAdjacencies(FILENAME);
-        this.stations.putAll(map);
-
+    public void init(String filename) throws FileNotFoundException {
+        // read in the stations - map from index to name
+        Map<Integer, String> map = StationReader.readStations(filename);
         // init graph with those stations
-        init(adjacencies);
+        Map<Set<Integer>, List<String>> adjacencies = StationReader.readAdjacencies(filename);
+        init(map, adjacencies);
     }
 
     /**
      * Fills in the graph with data provided by the parameter
      * Modifies the graph so that after the call it will contain all the stations and edges between those stations
      */
-    public void init(Map<Integer, Map<Integer, String>> adjacencies) {
-        adjacencies.forEach((stationFromIndex, stationFromEdges) -> {
-            stationFromEdges.forEach((stationToIndex, line) -> {
-                Set<Integer> nodes = new HashSet<>();
-                nodes.add(stationFromIndex);
-                nodes.add(stationToIndex);
-                UndirectedUnweightedColouredEdge<Integer> edge = new UndirectedUnweightedColouredEdge<>(nodes, line);
-                graph.addEdge(edge);
-            });
-        });
+    public void init(Map<Integer, String> map, Map<Set<Integer>, List<String>> adjacencies) {
+        // TODO: assert integrity
+        stations.putAll(map);
+        adjacencies.forEach(
+                (nodes, lines) -> lines.forEach(line -> {
+                    UndirectedUnweightedColouredEdge<Integer> edge = new UndirectedUnweightedColouredEdge<>(nodes, line);
+                    graph.addEdge(edge);
+                }));
     }
 
     /**
@@ -82,7 +76,7 @@ public class Metro {
      * @return StationDiff with that id from the graph
      * @throws java.util.NoSuchElementException when station with that id doesn't exist
      */
-    private Station getStationByIndex(int index) throws NoSuchElementException {
+    private String getStationByIndex(int index) throws NoSuchElementException {
 //        return graph.getVerticesIf(stationIndex -> stationIndex == index).stream().findFirst().orElseThrow();
         return stations.get(index);
     }
@@ -96,7 +90,7 @@ public class Metro {
      */
 
     public String getStationNameByIndex(Integer index) throws NoSuchElementException {
-        return getStationByIndex(index).getName();
+        return getStationByIndex(index);
     }
 
     /**
@@ -106,7 +100,7 @@ public class Metro {
      */
     public Map<Integer, String> getStationsNames() {
         return graph.getAllVertices()
-                .stream().collect(Collectors.toMap(Function.identity(), index -> stations.get(index).getName()));
+                .stream().collect(Collectors.toMap(Function.identity(), stations::get));
 //        return stations.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, s->s.getValue().getName()));
     }
 
@@ -148,48 +142,40 @@ public class Metro {
      * returned Stations are in order. If no path exists null is returned
      * @throws java.util.NoSuchElementException when station with either id doesn't exist
      */
-    public Set<List<Integer>> getShortestPaths(int from, int to) {
+    public List<List<Integer>> getShortestPaths(int from, int to) {
 
         // find all shortest paths
-        final Set<List<Integer>> paths = searchAlgorithm.searchIn(graph, from, to);
+        final List<List<UndirectedUnweightedColouredEdge<Integer>>> edgePaths = searchAlgorithm.searchIn(graph, from, to);
 
         // filter those with the least amount of line changes
-        final int fewestLines = paths.stream().map(path -> getNumberOfLines(this, path)).min(Comparator.naturalOrder()).orElse(0);
-        return paths.stream().filter(path -> getNumberOfLines(this, path) == fewestLines).collect(Collectors.toSet());
+        final int fewestLines = edgePaths.stream()
+                .map(this::getNumberOfLines)
+                .min(Comparator.naturalOrder()).orElse(0);
+
+        final List<List<UndirectedUnweightedColouredEdge<Integer>>> filtered =
+                edgePaths.stream()
+                        .filter(path -> getNumberOfLines(path) == fewestLines)
+                        .collect(Collectors.toList());
+
+        final List<List<Integer>> nodePaths = new ArrayList<>();
+
+        for (List<UndirectedUnweightedColouredEdge<Integer>> path : filtered) {
+            final List<Integer> resultPath = new ArrayList<>();
+            resultPath.add(from);
+            Integer last = from;
+            for (UndirectedUnweightedColouredEdge<Integer> integerUndirectedUnweightedColouredEdge : path) {
+                Integer newLast = integerUndirectedUnweightedColouredEdge.getOther(last);
+                resultPath.add(newLast);
+                last = newLast;
+            }
+            nodePaths.add(resultPath);
+        }
+        return nodePaths;
+
     }
 
     // there should be no lines out of order e.g  A -> red, B-> redX, C-> red
-    static int getNumberOfLines(Metro metro, List<Integer> path) {
-
-        // if we have 0 or 1 nodes, return the length
-        if (path.size() < 2) return path.size();
-
-        // result array
-        List<String> allLines = new ArrayList<>();
-
-        // for every pair of nodes,
-        for (int index = 1; index < path.size(); index++) {
-            var prev = path.get(index - 1);
-            var curr = path.get(index);
-//            var prevLines = metro.getLinesByIndex(prev.getIndex());
-//            var currLines = metro.getLinesByIndex();
-
-
-            Set<String> intersection = new HashSet<>();
-//            intersection.retainAll(currLines);
-
-            System.out.println(intersection);
-
-            // if no nodes share no lines
-            if (intersection.size() == 1) {
-                // if they share one line, add that
-                allLines.add(intersection.stream().findFirst().orElseThrow());
-            }
-            // if they share more than one, wait
-        }
-
-        Set<String> result = new HashSet<>(allLines);
-        System.out.println(result);
-        return result.size();
+    int getNumberOfLines(List<UndirectedUnweightedColouredEdge<Integer>> path) {
+        return path.stream().map(UndirectedUnweightedColouredEdge<Integer>::getColour).collect(Collectors.toSet()).size();
     }
 }

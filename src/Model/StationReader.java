@@ -8,7 +8,7 @@ import java.util.*;
  * Class responsible for reading in stations from the provided file
  */
 class StationReader {
-    public static Map<Integer, String> readStations(String filename) throws FileNotFoundException {
+    public static Map<Integer, String> readStations(String filename) throws FileNotFoundException, IndexOutOfBoundsException, NumberFormatException {
         Map<Integer, String> stations = new HashMap<>();
         File file = new File(filename);
         try (Scanner scanner = new Scanner(file)) {
@@ -24,7 +24,7 @@ class StationReader {
         return stations;
     }
 
-    public static Map<Set<Integer>, List<String>> readAdjacencies(String filename) throws FileNotFoundException {
+    public static Map<Set<Integer>, List<String>> readAdjacencies(String filename) throws FileNotFoundException, IndexOutOfBoundsException, NumberFormatException {
         Map<Set<Integer>, List<String>> stations = new HashMap<>();
         File file = new File(filename);
         try (Scanner scanner = new Scanner(file)) {
@@ -38,7 +38,7 @@ class StationReader {
         return stations;
     }
 
-    private static void getAdjacencyList(Integer from, String[] data, Map<Set<Integer>, List<String>> map) {
+    private static void getAdjacencyList(Integer from, String[] data, Map<Set<Integer>, List<String>> map) throws IndexOutOfBoundsException, NumberFormatException {
         for (int current = 2; current < data.length; current += 3) {
             String metroLineString = data[current].toUpperCase();
 

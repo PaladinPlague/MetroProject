@@ -1,8 +1,6 @@
 package GraphADT;
 
-import java.util.Collection;
 import java.util.Set;
-import java.util.function.Predicate;
 
 public interface GraphADT<T, E extends Edge<T>> {
 
@@ -21,15 +19,6 @@ public interface GraphADT<T, E extends Edge<T>> {
      * @return true if this exact edge exists in the graph, false otherwise
      */
     boolean hasEdge(E edge);
-
-    /**
-     * Check whether an edge between these two nodes exists in the system
-     *
-     * @param v1 One of the edges
-     * @param v2 Second of the edges
-     * @return True if there exists an edge between v1 and v2, false otherwise
-     */
-    boolean hasEdgeBetween(T v1, T v2);
 
     /**
      * Check whether this vertex exists in the graph
@@ -70,28 +59,110 @@ public interface GraphADT<T, E extends Edge<T>> {
     boolean removeVertex(T vertex);
 
     /**
-     * Check the weight of a given edge
+     * Returns the degree of the specified vertex.
+     * A degree of a vertex in an undirected graph is the number of edges touching that vertex.
+     * In directed graphs this method returns the sum of the "in degree" and the "out degree"
      *
-     * @param edge The edge to check the weight of
-     * @return the weight of the edge
+     * @param vertex degree of this vertex will be returned
+     * @return integer representing the degree of provided vertex
+     * @throws java.util.NoSuchElementException if the graph does not contain the vertex
      */
-    int getWeightOfEdge(E edge);
+    Integer degreeOf(T vertex);
 
-    Set<T> getVerticesIf(Predicate<T> predicate);
+    /**
+     * Returns the inDegree of the specified vertex
+     * In an undirected graph inDegree wil be equal to outDegree.
+     *
+     * @param vertex inDegree of this vertex will be returned
+     * @return integer representing the inDegree of provided vertex
+     * @throws java.util.NoSuchElementException if the graph does not contain the vertex
+     */
+    Integer inDegreeOf(T vertex);
 
-    Set<T> getNeighboursOf(T vertex);
+    /**
+     * Returns the outDegree of the specified vertex
+     * In an undirected graph outDegree wil be equal to inDegree.
+     *
+     * @param vertex outDegree of this vertex will be returned
+     * @return integer representing the outDegree of provided vertex
+     * @throws java.util.NoSuchElementException if the graph does not contain the vertex
+     */
+    Integer outDegreeOf(T vertex);
 
+    /**
+     * Returns a set of all edges connecting the specified vertices.
+     * If there are no edges between those edges, it returns an empty set.
+     *
+     * @return set of edges between the vertices
+     * @throws java.util.NoSuchElementException if the graph does not contain either the vertex
+     */
     Set<E> getEdgesBetween(T v1, T v2);
 
-//    List<T> findPath(T from, T to);
+    /**
+     * Get all outgoing edges of the provided vertex. In an undirected graph this will return the same result as getEdgesOf.
+     *
+     * @param vertex Outgoing edges of this vertex will be returned
+     * @return the outgoing edges of the provided vertex
+     * @throws java.util.NoSuchElementException if the graph does not contain the vertex
+     */
+    Set<E> getOutgoingEdgesOf(T vertex);
 
-    Set<T> getOutgoing(T vertex);
+    /**
+     * Get all ingoing edges of the provided vertex. In an undirected graph this will return the same result as getEdgesOf.
+     *
+     * @param vertex Ingoing edges of this vertex will be returned
+     * @return the Ingoing edges of the provided vertex
+     * @throws java.util.NoSuchElementException if the graph does not contain the vertex
+     */
+    Set<E> getIngoingEdgesOf(T vertex);
 
+    /**
+     * Get ingoing and outgoing edges of the vertex
+     *
+     * @param vertex All edges of this vertex will be returned
+     * @return all edges of the provided vertex
+     * @throws java.util.NoSuchElementException if the graph does not contain the vertex
+     */
     Set<E> getEdgesOf(T vertex);
 
-    Set<T> getIngoing(T vertex);
+    /**
+     * Returns a set of outgoing neighbours of this graph.
+     * In an undirected graph this will return the same set as getIngoingNeighbours
+     * @param vertex outgoing neighbours of this vertex will be returned
+     * @return the set of outgoing neighbours of the provided vertex
+     * @throws java.util.NoSuchElementException if the graph does not contain the vertex
+     */
+    Set<T> getOutgoingNeighboursOf(T vertex);
 
+    /**
+     * Returns a set of ingoing neighbours of this graph.
+     * In an undirected graph this will return the same set as getOutgoingNeighbours
+     * @param vertex ingoing neighbours of this vertex will be returned
+     * @return the set of ingoing neighbours of the provided vertex
+     * @throws java.util.NoSuchElementException if the graph does not contain the vertex
+     */
+    Set<T> getIngoingNeighboursOf(T vertex);
+
+    /**
+     * Returns a set of the neighbours of this graph.
+     * The set contains both incoming and outgoing neighbours.
+     * @param vertex neighbours of this vertex will be returned
+     * @return the set of neighbours of the provided vertex
+     * @throws java.util.NoSuchElementException if the graph does not contain the vertex
+     */
+    Set<T> getNeighboursOf(T vertex);
+
+    /**
+     * Get all the vertices of the graph
+     *
+     * @return The set of all vertices of the graph
+     */
     Set<T> getAllVertices();
 
-    Collection<E> getAllEdges();
+    /**
+     * Get all edges of the graph
+     *
+     * @return The set of all the edges of the graph
+     */
+    Set<E> getAllEdges();
 }

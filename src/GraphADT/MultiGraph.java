@@ -1,20 +1,19 @@
 package GraphADT;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class MultiGraph<T, E extends Edge<T>> implements GraphADT<T, E> {
 
-    final private List<E> edgeList;
+    final private Set<E> edgeList;
     final private Set<T> vertices;
 
 
     public MultiGraph() {
-        this.edgeList = new ArrayList<>();
+        this.edgeList = new HashSet<>();
         this.vertices = new HashSet<>();
     }
 
@@ -29,23 +28,13 @@ public class MultiGraph<T, E extends Edge<T>> implements GraphADT<T, E> {
     }
 
     @Override
-    public boolean hasEdgeBetween(T v1, T v2) {
-        return edgeList.stream().anyMatch(e -> e.getNodes().equals(List.of(v1, v2)));
+    public Set<E> getOutgoingEdgesOf(T vertex) {
+        return getEdgesOf(vertex);
     }
 
     @Override
-    public int getWeightOfEdge(E edge) {
-        return 1;
-    }
-
-    @Override
-    public Set<T> getOutgoing(T vertex) {
-        return getNeighboursOf(vertex);
-    }
-
-    @Override
-    public Set<T> getIngoing(T vertex) {
-        return getNeighboursOf(vertex);
+    public Set<E> getIngoingEdgesOf(T vertex) {
+        return getEdgesOf(vertex);
     }
 
     @Override
@@ -80,15 +69,21 @@ public class MultiGraph<T, E extends Edge<T>> implements GraphADT<T, E> {
     }
 
     @Override
-    public Set<T> getVerticesIf(Predicate<T> predicate) {
-        return vertices.stream()
-                .filter(predicate)
-                .collect(Collectors.toSet());
+    public Set<E> getEdgesOf(T vertex) {
+        if (!this.hasVertex(vertex)) {
+            throw new NoSuchElementException();
+        }
+        return edgeList.stream().filter(edge -> edge.contains(vertex)).collect(Collectors.toSet());
     }
 
     @Override
-    public Set<E> getEdgesOf(T vertex) {
-        return edgeList.stream().filter(edge -> edge.contains(vertex)).collect(Collectors.toSet());
+    public Set<T> getOutgoingNeighboursOf(T vertex) {
+        return getNeighboursOf(vertex);
+    }
+
+    @Override
+    public Set<T> getIngoingNeighboursOf(T vertex) {
+        return getNeighboursOf(vertex);
     }
 
     @Override
@@ -97,7 +92,26 @@ public class MultiGraph<T, E extends Edge<T>> implements GraphADT<T, E> {
     }
 
     @Override
+    public Integer degreeOf(T vertex) {
+        return getEdgesOf(vertex).size();
+    }
+
+    @Override
+    public Integer inDegreeOf(T vertex) {
+        return getIngoingEdgesOf(vertex).size();
+    }
+
+    @Override
+    public Integer outDegreeOf(T vertex) {
+        return getOutgoingEdgesOf(vertex).size();
+    }
+
+    @Override
     public Set<E> getEdgesBetween(T v1, T v2) {
+        if (!this.hasVertex(v1) || !this.hasVertex(v2)) {
+            throw new IllegalArgumentException();
+        }
+
         return edgeList.stream().filter(edge -> edge.getNodes().equals(List.of(v1, v2))).collect(Collectors.toSet());
     }
 
@@ -108,7 +122,7 @@ public class MultiGraph<T, E extends Edge<T>> implements GraphADT<T, E> {
 
     @Override
     public Set<E> getAllEdges() {
-        return new HashSet<>(edgeList);
+        return edgeList;
     }
 
 

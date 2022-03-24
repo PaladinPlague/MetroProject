@@ -8,8 +8,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Facade for the backend layer over the graphADT classes
- * Here configuration of the backend should take place - initialisation of anything that the backend will need
+ * The backend class for the metro system
  */
 public class Metro {
     /**
@@ -23,7 +22,7 @@ public class Metro {
     final private ShortestPathsAlgorithm<Integer, UndirectedUnweightedColouredEdge<Integer>> searchAlgorithm;
 
     /**
-     * A map from index to station - does not hold state.
+     * A map from index to station name - it does not hold state of the system. Used to map indexes to station names.
      * If the station exists in a graph, it should exist here, but if a station exists here it does not have to exist in the graph
      */
     final private Map<Integer, String> stations;
@@ -31,8 +30,8 @@ public class Metro {
     /**
      * Provide a graph to the system in this constructor to have control over the initial state of the system
      *
-     * @param graph           the initial state of the systems graph, TODO should be empty / move instantiation here
-     * @param searchAlgorithm the algorithm used to find all shortest paths in this multigraph
+     * @param graph           the graph class used that will be used to find paths between stations,
+     * @param searchAlgorithm the algorithm used to find all shortest paths in the graph
      */
     public Metro(GraphADT<Integer, UndirectedUnweightedColouredEdge<Integer>> graph, ShortestPathsAlgorithm<Integer, UndirectedUnweightedColouredEdge<Integer>> searchAlgorithm) {
         this.graph = graph;
@@ -41,30 +40,36 @@ public class Metro {
     }
 
     /**
-     * Fills in the graph with stations from the file bostonmetro.txt
+     * Fills in the graph with stations from the provided file
      *
-     * @throws FileNotFoundException when file does not exist
+     * @throws FileNotFoundException     when file does not exist
+     * @throws IndexOutOfBoundsException when file format is incorrect
+     * @throws NumberFormatException     when file format is incorrect
      */
-    public void init(String filename) throws FileNotFoundException {
+    public void init(String filename) throws FileNotFoundException, IndexOutOfBoundsException, IllegalArgumentException {
         // read in the stations - map from index to name
         Map<Integer, String> map = StationReader.readStations(filename);
-        // init graph with those stations
+        // read in the adjacencies between stations
         Map<Set<Integer>, List<String>> adjacencies = StationReader.readAdjacencies(filename);
+        // init graph with those stations
         init(map, adjacencies);
     }
 
     /**
-     * Fills in the graph with data provided by the parameter
+     * Fills in the graph with data provided by the parameters
      * Modifies the graph so that after the call it will contain all the stations and edges between those stations
+     *
+     * @throws IllegalArgumentException when any adjacency does not contain exactly two vertices
      */
-    public void init(Map<Integer, String> map, Map<Set<Integer>, List<String>> adjacencies) {
-        // TODO: assert integrity
+    public void init(Map<Integer, String> map, Map<Set<Integer>, List<String>> adjacencies) throws IllegalArgumentException {
         stations.putAll(map);
+        map.keySet().forEach(graph::addVertex);
         adjacencies.forEach(
-                (nodes, lines) -> lines.forEach(line -> {
-                    UndirectedUnweightedColouredEdge<Integer> edge = new UndirectedUnweightedColouredEdge<>(nodes, line);
-                    graph.addEdge(edge);
-                }));
+                (nodes, lines) -> lines.forEach(
+                        line -> {
+                            UndirectedUnweightedColouredEdge<Integer> edge = new UndirectedUnweightedColouredEdge<>(nodes, line);
+                            graph.addEdge(edge);
+                        }));
     }
 
     /**
@@ -72,25 +77,15 @@ public class Metro {
      * Returns the station from the system, searching by its index.
      * If no station with provided id exists, the method throws NoSuchElementException.
      *
-     * @param index id of the StationDiff
-     * @return StationDiff with that id from the graph
-     * @throws java.util.NoSuchElementException when station with that id doesn't exist
-     */
-    private String getStationByIndex(int index) throws NoSuchElementException {
-//        return graph.getVerticesIf(stationIndex -> stationIndex == index).stream().findFirst().orElseThrow();
-        return stations.get(index);
-    }
-
-    /**
-     * Use to retrieve name of the station with given id in the system
-     *
      * @param index id of the station
-     * @return Name of stations in the system with given id
+     * @return Name of the station with that id from the graph
      * @throws java.util.NoSuchElementException when station with that id doesn't exist
      */
-
-    public String getStationNameByIndex(Integer index) throws NoSuchElementException {
-        return getStationByIndex(index);
+    public String getStationByIndex(Integer index) throws NoSuchElementException {
+        Integer station = graph.getAllVertices().stream()
+                .filter(index::equals)
+                .findFirst().orElseThrow();
+        return stations.get(station);
     }
 
     /**
@@ -99,9 +94,8 @@ public class Metro {
      * @return Map from index to the name of station of all stations in the system
      */
     public Map<Integer, String> getStationsNames() {
-        return graph.getAllVertices()
-                .stream().collect(Collectors.toMap(Function.identity(), stations::get));
-//        return stations.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, s->s.getValue().getName()));
+        return graph.getAllVertices().stream()
+                .collect(Collectors.toMap(Function.identity(), stations::get));
     }
 
     /**
@@ -119,11 +113,11 @@ public class Metro {
     }
 
     /**
-     * Use to retrieve lines of a station
+     * Retrieve lines of a station
      *
      * @param index id of the station in the system
      * @return A set of lines of this station
-     * @throws java.util.NoSuchElementException when station with that id doesn't exist
+     * @throws java.util.NoSuchElementException when the index is not an index of a station in the graph
      */
     public Set<String> getLinesByIndex(Integer index) {
         return graph.getEdgesOf(index).stream()
@@ -140,7 +134,7 @@ public class Metro {
      * @param to   Destination station name
      * @return List of Model.StationDiff starting with from, and ending with to, representing the shortest path from "from" to "to" in the system.
      * returned Stations are in order. If no path exists null is returned
-     * @throws java.util.NoSuchElementException when station with either id doesn't exist
+     * @throws java.util.NoSuchElementException when either index is not an index of a station in the graph
      */
     public List<List<Integer>> getShortestPaths(int from, int to) {
 
@@ -148,34 +142,41 @@ public class Metro {
         final List<List<UndirectedUnweightedColouredEdge<Integer>>> edgePaths = searchAlgorithm.searchIn(graph, from, to);
 
         // filter those with the least amount of line changes
+        final List<List<UndirectedUnweightedColouredEdge<Integer>>> filtered = filterLeastAmountOfLines(edgePaths);
+
+        // convert from edges to nodes
+        return convertToVertices(from, filtered);
+
+    }
+
+    private List<List<UndirectedUnweightedColouredEdge<Integer>>> filterLeastAmountOfLines(List<List<UndirectedUnweightedColouredEdge<Integer>>> edgePaths) {
         final int fewestLines = edgePaths.stream()
                 .map(this::getNumberOfLines)
-                .min(Comparator.naturalOrder()).orElse(0);
+                .min(Comparator.naturalOrder()).orElseThrow();
 
-        final List<List<UndirectedUnweightedColouredEdge<Integer>>> filtered =
-                edgePaths.stream()
-                        .filter(path -> getNumberOfLines(path) == fewestLines)
-                        .collect(Collectors.toList());
+        return edgePaths.stream()
+                .filter(path -> getNumberOfLines(path) == fewestLines)
+                .collect(Collectors.toList());
+    }
 
+    private List<List<Integer>> convertToVertices(int from, List<List<UndirectedUnweightedColouredEdge<Integer>>> filtered) {
         final List<List<Integer>> nodePaths = new ArrayList<>();
 
         for (List<UndirectedUnweightedColouredEdge<Integer>> path : filtered) {
             final List<Integer> resultPath = new ArrayList<>();
             resultPath.add(from);
             Integer last = from;
-            for (UndirectedUnweightedColouredEdge<Integer> integerUndirectedUnweightedColouredEdge : path) {
-                Integer newLast = integerUndirectedUnweightedColouredEdge.getOther(last);
-                resultPath.add(newLast);
-                last = newLast;
+            for (UndirectedUnweightedColouredEdge<Integer> edge : path) {
+                Integer newLastVertex = edge.getOther(last);
+                resultPath.add(newLastVertex);
+                last = newLastVertex;
             }
             nodePaths.add(resultPath);
         }
         return nodePaths;
-
     }
 
-    // there should be no lines out of order e.g  A -> red, B-> redX, C-> red
-    int getNumberOfLines(List<UndirectedUnweightedColouredEdge<Integer>> path) {
+    private int getNumberOfLines(List<UndirectedUnweightedColouredEdge<Integer>> path) {
         return path.stream().map(UndirectedUnweightedColouredEdge<Integer>::getColour).collect(Collectors.toSet()).size();
     }
 }

@@ -13,6 +13,12 @@ public class MetroController implements Runnable {
     final Metro metro;
     final String sourcePath;
 
+    /**
+     *
+     * @param view view of the system
+     * @param metro the backend metro class
+     * @param sourcePath the path for the source file for station data
+     */
     public MetroController(MetroView view, Metro metro, String sourcePath) {
         this.view = view;
         this.metro = metro;
@@ -26,26 +32,31 @@ public class MetroController implements Runnable {
             metro.init(sourcePath);
             // set up communication between model and view
             setUpView();
-            // TODO: assert that stations from the UI match those from the backend
-//
+
             // start the ui
             view.start();
         } catch (FileNotFoundException e) {
-            System.err.println(e);
+
             System.err.println(e.getMessage());
             System.err.println(Arrays.toString(e.getStackTrace()));
 
             System.out.println("FILE DOES NOT EXIST");
             System.exit(1);
+        } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+            System.err.println(Arrays.toString(e.getStackTrace()));
+
+            System.out.println("INVALID DATA FORMAT");
+            System.exit(1);
         } catch (IOError e) {
-            System.err.println(e);
+
             System.err.println(e.getMessage());
             System.err.println(Arrays.toString(e.getStackTrace()));
 
             System.out.println("ERROR READING DATA");
             System.exit(1);
         } catch (Exception e) {
-            System.err.println(e);
+
             System.err.println(e.getMessage());
             System.err.println(Arrays.toString(e.getStackTrace()));
 
@@ -58,27 +69,33 @@ public class MetroController implements Runnable {
      * Initialize and set up callback - communication between UI and backend
      */
     private void setUpView() {
-        view.setUpOnDisplayGraph(() -> view.displayStations(metro.getStationsNames(), metro.getStationsLines()));
+        view.setUpOnDisplayGraph(() -> {
+            try {
+                view.displayStations(metro.getStationsNames(), metro.getStationsLines());
+            } catch (IllegalStateException e) {
+                view.alert("Backend returned inconsistent data. Try again.");
+            }
+        });
 
         view.setUpOnFindPath(() -> {
             Integer[] stations = view.getStationsForPathFinding();
             if (stations.length != 2) {
-                view.alert("Please provide the names of the stations");
+                view.alert("Please provide the names of the stations.");
             } else {
                 try {
                     Integer from = stations[0];
                     Integer to = stations[1];
                     List<List<Integer>> paths = metro.getShortestPaths(from, to);
+
                     // get names of the stations in order
                     List<List<String>> names = paths.stream()
                             .map(path -> path.stream()
-                                    .map(metro::getStationNameByIndex)
+                                    .map(metro::getStationByIndex)
                                     .collect(Collectors.toList()))
                             .collect(Collectors.toList());
 
                     view.displayPath(names);
                 } catch (NoSuchElementException e) {
-                    System.err.println(e);
                     System.err.println(e.getMessage());
                     System.err.println(Arrays.toString(e.getStackTrace()));
 

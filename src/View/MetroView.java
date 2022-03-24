@@ -66,7 +66,7 @@ public interface MetroView {
      *
      * @param stations List of View.StationData to be displayed
      */
-    void displayStations(Map<Integer, String> stations, Map<Integer, Set<String>> lines);
+    void displayStations(Map<Integer, String> stations, Map<Integer, Set<String>> lines) throws IllegalStateException;
 
     /**
      * Call to tell the UI to display given list of stations

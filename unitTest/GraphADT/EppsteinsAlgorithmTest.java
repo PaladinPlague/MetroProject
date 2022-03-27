@@ -1,8 +1,10 @@
 package GraphADT;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -240,5 +242,50 @@ class EppsteinsAlgorithmTest {
 
         Integer last = algorithm.getLastNode(path, 1).orElse(null);
         assertNull(last);
+    }
+
+    @Test
+    void EppsteinsAlogrithmWorks() {
+
+        MultiGraph<Integer, UndirectedUnweightedColouredEdge<Integer>> graph = new MultiGraph<Integer, UndirectedUnweightedColouredEdge<Integer>>();
+
+        Set<Integer> nodes1 = new HashSet<>();
+
+        nodes1.add(1);
+        nodes1.add(2);
+
+        var edge1 = new UndirectedUnweightedColouredEdge<>(nodes1, "blue");
+        graph.addEdge(edge1);
+
+        Set<Integer> nodes2 = new HashSet<>();
+
+        nodes2.add(2);
+        nodes2.add(3);
+
+        var edge2 = new UndirectedUnweightedColouredEdge<>(nodes2, "orange");
+        graph.addEdge(edge2);
+
+        Set<Integer> nodes3 = new HashSet<>();
+
+        nodes3.add(2);
+        nodes3.add(4);
+
+        var edge3 = new UndirectedUnweightedColouredEdge<>(nodes3, "red");
+        graph.addEdge(edge3);
+
+        Set<Integer> nodes4 = new HashSet<>();
+
+        nodes4.add(3);
+        nodes4.add(4);
+
+        var edge4 = new UndirectedUnweightedColouredEdge<>(nodes4, "green");
+        graph.addEdge(edge4);
+
+
+        EppsteinsAlgorithm<Integer, UndirectedUnweightedColouredEdge<Integer>> algorithm = new EppsteinsAlgorithm<Integer, UndirectedUnweightedColouredEdge<Integer>>();
+        List<List<UndirectedUnweightedColouredEdge<Integer>>> result = algorithm.searchIn(graph, 1, 4);
+
+        Assertions.assertEquals(List.of(List.of(edge1, edge3)), result);
+
     }
 }

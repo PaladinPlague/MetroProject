@@ -67,6 +67,11 @@ public class ConsoleView implements MetroView {
     }
 
     @Override
+    public void setUpStations(Map<Integer, String> stations) {
+
+    }
+
+    @Override
     public Integer getStationForWhichLine() {
         System.out.println(">> Please input stations name: \n");
         return Integer.parseInt(inputReader.nextLine());
@@ -79,7 +84,7 @@ public class ConsoleView implements MetroView {
     }
 
     @Override
-    public void displayPath(List<List<String>> paths) {
+    public void displayPath(Set<List<String>> paths) {
 //        assert path.size() == lines.size();
 //        IntStream.range(0, path.size()).forEach(index -> System.out.println(index + ". " + path.get(index) + ", which is on lines: " + lines.get(index)));
         paths.forEach(path -> System.out.println(path + "\n"));

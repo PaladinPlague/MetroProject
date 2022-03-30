@@ -43,6 +43,8 @@ public interface MetroView {
 
     // Getter methods - you call these to get the values from the UI
 
+    void setUpStations(Map<Integer, String> stations);
+
     /**
      * Call to get two stations that should be passed to the backend to find path between
      *
@@ -74,7 +76,7 @@ public interface MetroView {
      *
      * @param path List of View.StationData, representing path from first element to the last element of this list
      */
-    void displayPath(List<List<String>> path);
+    void displayPath(Set<List<String>> path);
 
     /**
      * Call to alert the UI with message.

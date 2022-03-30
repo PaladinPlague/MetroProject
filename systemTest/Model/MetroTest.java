@@ -292,7 +292,7 @@ class MetroSystemTest {
 
     @Test
     void testFindPathsBetween_ParkSt_and_State() {
-        List<List<Integer>> expectedPaths = List.of(
+        Set<List<Integer>> expectedPaths = Set.of(
                 List.of(
                         29, 30, 28
                 ),
@@ -300,50 +300,50 @@ class MetroSystemTest {
                         29, 27, 28
                 )
         );
-        List<List<Integer>> actualPaths = metro.getShortestPaths(29, 28);
+        Set<List<Integer>> actualPaths = metro.getShortestPaths(29, 28);
 
-        assertTrue(listEqualIgnoreOrder(actualPaths, expectedPaths));
+        assertEquals(actualPaths,expectedPaths);
     }
 
     @Test
     void testFindPathsBetween_Boylston_and_Aquarium() {
-        List<List<Integer>> expectedPaths = List.of(
+        Set<List<Integer>> expectedPaths = Set.of(
                 List.of(
                         31, 29, 27, 28, 26
                 )
         );
-        List<List<Integer>> actualPaths = metro.getShortestPaths(31, 26);
+        Set<List<Integer>> actualPaths = metro.getShortestPaths(31, 26);
 
-        assertTrue(listEqualIgnoreOrder(actualPaths, expectedPaths));
+        assertEquals(actualPaths,expectedPaths);
     }
 
     @Test
     void testFindPathsBetween_DowntownCrossing_and_NorthStation() {
-        List<List<Integer>> expectedPaths = List.of(
+        Set<List<Integer>> expectedPaths = Set.of(
                 List.of(
                         30, 28, 22, 20
                 )
         );
-        List<List<Integer>> actualPaths = metro.getShortestPaths(30, 20);
+        Set<List<Integer>> actualPaths = metro.getShortestPaths(30, 20);
 
-        assertTrue(listEqualIgnoreOrder(actualPaths, expectedPaths));
+        assertEquals(actualPaths,expectedPaths);
     }
 
     @Test
     void testFindPathsBetween_Copley_and_Longwood() {
-        List<List<Integer>> expectedPaths = List.of(
+        Set<List<Integer>> expectedPaths = Set.of(
                 List.of(
                         65, 57, 47, 51, 41
                 )
         );
-        List<List<Integer>> actualPaths = metro.getShortestPaths(65, 41);
+        Set<List<Integer>> actualPaths = metro.getShortestPaths(65, 41);
 
-        assertTrue(listEqualIgnoreOrder(actualPaths, expectedPaths));
+        assertEquals(actualPaths,expectedPaths);
     }
 
     @Test
     void testFindPathsBetween_Charles_and_Aquarium() {
-        List<List<Integer>> expectedPaths = List.of(
+        Set<List<Integer>> expectedPaths = Set.of(
                 List.of(
                         25, 29, 30, 28, 26
                 ),
@@ -351,12 +351,8 @@ class MetroSystemTest {
                         25, 29, 27, 28, 26
                 )
         );
-        List<List<Integer>> actualPaths = metro.getShortestPaths(25, 26);
+        Set<List<Integer>> actualPaths = metro.getShortestPaths(25, 26);
 
-        assertTrue(listEqualIgnoreOrder(actualPaths, expectedPaths));
-    }
-
-    static boolean listEqualIgnoreOrder(List<List<Integer>> arr1, List<List<Integer>> arr2) {
-        return arr2.containsAll(arr1) && arr1.containsAll(arr2);
+        assertEquals(actualPaths,expectedPaths);
     }
 }

@@ -136,7 +136,7 @@ public class Metro {
      * returned Stations are in order. If no path exists null is returned
      * @throws java.util.NoSuchElementException when either index is not an index of a station in the graph
      */
-    public List<List<Integer>> getShortestPaths(int from, int to) {
+    public Set<List<Integer>> getShortestPaths(int from, int to) {
 
         // find all shortest paths
         final List<List<UndirectedUnweightedColouredEdge<Integer>>> edgePaths = searchAlgorithm.searchIn(graph, from, to);
@@ -159,8 +159,8 @@ public class Metro {
                 .collect(Collectors.toList());
     }
 
-    private List<List<Integer>> convertToVertices(int from, List<List<UndirectedUnweightedColouredEdge<Integer>>> filtered) {
-        final List<List<Integer>> nodePaths = new ArrayList<>();
+    private Set<List<Integer>> convertToVertices(int from, List<List<UndirectedUnweightedColouredEdge<Integer>>> filtered) {
+        final Set<List<Integer>> nodePaths = new HashSet<>();
 
         for (List<UndirectedUnweightedColouredEdge<Integer>> path : filtered) {
             final List<Integer> resultPath = new ArrayList<>();

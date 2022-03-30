@@ -43,13 +43,14 @@ class MetroTest {
 
         metro.init(map, edges);
 
-        final List<List<Integer>> result = metro.getShortestPaths(1, 4);
-        final List<List<Integer>> expected = List.of(
+        final Set<List<Integer>> result = metro.getShortestPaths(1, 4);
+        final Set<List<Integer>> expected = Set.of(
                 List.of(1, 3, 4),
                 List.of(1, 2, 4)
         );
 
-        assertTrue(result.containsAll(expected));
+//        assertTrue(result.containsAll(expected));
+        assertEquals(expected, result);
     }
 
     @Test
@@ -71,12 +72,13 @@ class MetroTest {
 
         metro.init(map, edges);
 
-        final List<List<Integer>> result = metro.getShortestPaths(1, 4);
-        final List<List<Integer>> expected = List.of(
+        final Set<List<Integer>> result = metro.getShortestPaths(1, 4);
+        final Set<List<Integer>> expected = Set.of(
                 List.of(1, 2, 4)
         );
 
-        assertTrue(result.containsAll(expected));
+//        assertTrue(result.containsAll(expected));
+        assertEquals(expected, result);
     }
 
     @Test

@@ -1,7 +1,7 @@
 import GraphADT.*;
 import Model.Metro;
-import View.ConsoleView;
 import View.MetroView;
+import View.UIView;
 
 public class Driver {
     public static void main(String[] args) {
@@ -13,10 +13,10 @@ public class Driver {
 
         // init dependencies
         final Metro metro = new Metro(stations, searchAlgorithm);
-        final MetroView view = new ConsoleView();
+        final MetroView view = new UIView();
+//         final MetroView view = new ConsoleView();
 
         final MetroController controller = new MetroController(view, metro, FILENAME);
         controller.run();
     }
 }
-

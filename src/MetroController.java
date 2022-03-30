@@ -1,10 +1,4 @@
 import Model.Metro;
-<<<<<<< HEAD
-=======
-import Model.Station;
-import View.ConsoleView;
-import View.UIView;
->>>>>>> [WIP]feat: implement basic UI
 import View.MetroView;
 
 import java.io.FileNotFoundException;
@@ -12,6 +6,7 @@ import java.io.IOError;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MetroController implements Runnable {
@@ -20,9 +15,8 @@ public class MetroController implements Runnable {
     final String sourcePath;
 
     /**
-     *
-     * @param view view of the system
-     * @param metro the backend metro class
+     * @param view       view of the system
+     * @param metro      the backend metro class
      * @param sourcePath the path for the source file for station data
      */
     public MetroController(MetroView view, Metro metro, String sourcePath) {
@@ -91,14 +85,14 @@ public class MetroController implements Runnable {
                 try {
                     Integer from = stations[0];
                     Integer to = stations[1];
-                    List<List<Integer>> paths = metro.getShortestPaths(from, to);
+                    Set<List<Integer>> paths = metro.getShortestPaths(from, to);
 
                     // get names of the stations in order
-                    List<List<String>> names = paths.stream()
+                    Set<List<String>> names = paths.stream()
                             .map(path -> path.stream()
                                     .map(metro::getStationByIndex)
                                     .collect(Collectors.toList()))
-                            .collect(Collectors.toList());
+                            .collect(Collectors.toSet());
 
                     view.displayPath(names);
                 } catch (NoSuchElementException e) {
@@ -118,5 +112,7 @@ public class MetroController implements Runnable {
                 view.alert("No Stations with this name exist in the system");
             }
         });
+
+        view.setUpStations(metro.getStationsNames());
     }
 }

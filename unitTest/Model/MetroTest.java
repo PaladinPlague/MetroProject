@@ -33,12 +33,12 @@ class MetroTest {
                 3, "c",
                 4, "d"
         );
-        Map<Set<Integer>, List<String>> edges = Map.of(
-                Set.of(1, 2), List.of("red"),
-                Set.of(2, 3), List.of("red"),
-                Set.of(3, 4), List.of("red"),
-                Set.of(2, 4), List.of("red"),
-                Set.of(1, 3), List.of("red")
+        Map<Set<Integer>, Set<String>> edges = Map.of(
+                Set.of(1, 2), Set.of("red"),
+                Set.of(2, 3), Set.of("red"),
+                Set.of(3, 4), Set.of("red"),
+                Set.of(2, 4), Set.of("red"),
+                Set.of(1, 3), Set.of("red")
         );
 
         metro.init(map, edges);
@@ -61,12 +61,12 @@ class MetroTest {
                 3, "c",
                 4, "d"
         );
-        Map<Set<Integer>, List<String>> edges = Map.of(
-                Set.of(1, 2), List.of("red"),
-                Set.of(2, 3), List.of("red"),
-                Set.of(3, 4), List.of("red"),
-                Set.of(2, 4), List.of("red"),
-                Set.of(1, 3), List.of("blue")
+        Map<Set<Integer>, Set<String>> edges = Map.of(
+                Set.of(1, 2), Set.of("red"),
+                Set.of(2, 3), Set.of("red"),
+                Set.of(3, 4), Set.of("red"),
+                Set.of(2, 4), Set.of("red"),
+                Set.of(1, 3), Set.of("blue")
         );
 
         metro.init(map, edges);
@@ -119,11 +119,11 @@ class MetroTest {
                 4, "d",
                 5, "e"
         );
-        Map<Set<Integer>, List<String>> edges = Map.of(
-                Set.of(1, 2), List.of("red"),
-                Set.of(1, 3), List.of("green"),
-                Set.of(1, 4), List.of("blue"),
-                Set.of(4, 5), List.of("blue")
+        Map<Set<Integer>, Set<String>> edges = Map.of(
+                Set.of(1, 2), Set.of("red"),
+                Set.of(1, 3), Set.of("green"),
+                Set.of(1, 4), Set.of("blue"),
+                Set.of(4, 5), Set.of("blue")
         );
 
         metro.init(map, edges);
@@ -161,11 +161,11 @@ class MetroTest {
                 4, "d",
                 5, "e"
         );
-        Map<Set<Integer>, List<String>> edges = Map.of(
-                Set.of(1, 2), List.of("red"),
-                Set.of(1, 3), List.of("green"),
-                Set.of(1, 4), List.of("blue"),
-                Set.of(4, 5), List.of("blue")
+        Map<Set<Integer>, Set<String>> edges = Map.of(
+                Set.of(1, 2), Set.of("red"),
+                Set.of(1, 3), Set.of("green"),
+                Set.of(1, 4), Set.of("blue"),
+                Set.of(4, 5), Set.of("blue")
         );
 
         metro.init(map, edges);
@@ -191,12 +191,12 @@ class MetroTest {
                 3, "c",
                 4, "d"
         );
-        Map<Set<Integer>, List<String>> edges = Map.of(
-                Set.of(1, 2), List.of("red", "blue"),
-                Set.of(2, 3), List.of("blue"),
-                Set.of(3, 4), List.of("green"),
-                Set.of(2, 4), List.of("green"),
-                Set.of(1, 3), List.of("yellow")
+        Map<Set<Integer>, Set<String>> edges = Map.of(
+                Set.of(1, 2), Set.of("red", "blue"),
+                Set.of(2, 3), Set.of("blue"),
+                Set.of(3, 4), Set.of("green"),
+                Set.of(2, 4), Set.of("green"),
+                Set.of(1, 3), Set.of("yellow")
         );
 
         metro.init(map, edges);

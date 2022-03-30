@@ -1,0 +1,10 @@
+  1 Aaa	        Orange 0 2
+  2 Bbbb			    Orange 1 7
+  3 Cc			    Blue 0 4
+  4 D			    Blue 3 6 Red 8 7
+  5 Eeee			    Orange 6 0
+  6 Fffffffffffffff			    Blue 4 9 Orange 7 5
+  7 Gg			    Red 4 10 Orange 2 6
+  8 hH			    Red 0 4
+  9 IiIi		    Blue 6 0
+ 10 jjjJJJ			    Red 7 0

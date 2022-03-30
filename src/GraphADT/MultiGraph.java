@@ -124,11 +124,5 @@ public class MultiGraph<T, E extends Edge<T>> implements GraphADT<T, E> {
     public Set<E> getAllEdges() {
         return edgeList;
     }
-
-
-    @Override
-    public String toString() {
-        return "Graph {" + vertices + "}";
-    }
 }
 

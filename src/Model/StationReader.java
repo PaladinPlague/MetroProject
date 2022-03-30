@@ -24,8 +24,8 @@ class StationReader {
         return stations;
     }
 
-    public static Map<Set<Integer>, List<String>> readAdjacencies(String filename) throws FileNotFoundException, IndexOutOfBoundsException, NumberFormatException {
-        Map<Set<Integer>, List<String>> stations = new HashMap<>();
+    public static Map<Set<Integer>, Set<String>> readAdjacencies(String filename) throws FileNotFoundException, IndexOutOfBoundsException, NumberFormatException {
+        Map<Set<Integer>, Set<String>> stations = new HashMap<>();
         File file = new File(filename);
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
@@ -38,7 +38,7 @@ class StationReader {
         return stations;
     }
 
-    private static void getAdjacencyList(Integer from, String[] data, Map<Set<Integer>, List<String>> map) throws IndexOutOfBoundsException, NumberFormatException {
+    private static void getAdjacencyList(Integer from, String[] data, Map<Set<Integer>, Set<String>> map) throws IndexOutOfBoundsException, NumberFormatException {
         for (int current = 2; current < data.length; current += 3) {
             String metroLineString = data[current].toUpperCase();
 
@@ -50,11 +50,11 @@ class StationReader {
         }
     }
 
-    private static void addLine(Integer from, Map<Set<Integer>, List<String>> map, String metroLineString, int to) {
+    private static void addLine(Integer from, Map<Set<Integer>, Set<String>> map, String metroLineString, int to) {
         if (to != 0) {
             Set<Integer> key = Set.of(from, to);
             if (!map.containsKey(key)) {
-                List<String> list = new ArrayList<>();
+                Set<String> list = new HashSet<>();
                 map.put(key, list);
             }
             map.get(key).add(metroLineString);

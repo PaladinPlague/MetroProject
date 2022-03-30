@@ -50,7 +50,7 @@ public class Metro {
         // read in the stations - map from index to name
         Map<Integer, String> map = StationReader.readStations(filename);
         // read in the adjacencies between stations
-        Map<Set<Integer>, List<String>> adjacencies = StationReader.readAdjacencies(filename);
+        Map<Set<Integer>, Set<String>> adjacencies = StationReader.readAdjacencies(filename);
         // init graph with those stations
         init(map, adjacencies);
     }
@@ -61,7 +61,7 @@ public class Metro {
      *
      * @throws IllegalArgumentException when any adjacency does not contain exactly two vertices
      */
-    public void init(Map<Integer, String> map, Map<Set<Integer>, List<String>> adjacencies) throws IllegalArgumentException {
+    public void init(Map<Integer, String> map, Map<Set<Integer>, Set<String>> adjacencies) throws IllegalArgumentException {
         stations.putAll(map);
         map.keySet().forEach(graph::addVertex);
         adjacencies.forEach(

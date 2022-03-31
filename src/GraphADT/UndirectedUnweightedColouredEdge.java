@@ -61,6 +61,10 @@ public class UndirectedUnweightedColouredEdge<T> implements Edge<T> {
         return colour.equals(that.colour) && nodes.equals(that.nodes);
     }
 
+    public boolean stationsMatch(Edge<T> other) {
+        return this.getNodes().equals(other.getNodes());
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(colour, nodes);

@@ -69,14 +69,6 @@ public class MetroController implements Runnable {
      * Initialize and set up callback - communication between UI and backend
      */
     private void setUpView() {
-        view.setUpOnDisplayGraph(() -> {
-            try {
-                view.displayStations(metro.getStationsNames(), metro.getStationsLines());
-            } catch (IllegalStateException e) {
-                view.alert("Backend returned inconsistent data. Try again.");
-            }
-        });
-
         view.setUpOnFindPath(() -> {
             Integer[] stations = view.getStationsForPathFinding();
             if (stations.length != 2) {
@@ -96,20 +88,10 @@ public class MetroController implements Runnable {
 
                     view.displayPath(names);
                 } catch (NoSuchElementException e) {
-                    System.err.println(e.getMessage());
-                    System.err.println(Arrays.toString(e.getStackTrace()));
-
                     view.alert("Either one or both of the stations have a name that we couldn't find. Please check the names");
+                } catch (IllegalArgumentException e) {
+                    view.alert("These two stations are the same! Pick a pair that's different!");
                 }
-            }
-        });
-
-        view.setUpOnGetLines(() -> {
-            Integer stationIndex = view.getStationForWhichLine();
-            try {
-                view.alert(metro.getLinesByIndex(stationIndex).toString());
-            } catch (NoSuchElementException e) {
-                view.alert("No Stations with this name exist in the system");
             }
         });
 

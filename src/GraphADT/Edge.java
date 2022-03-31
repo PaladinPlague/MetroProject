@@ -36,4 +36,11 @@ public interface Edge<T> {
      * @return The weight of this edge. Should return 1 if the edge is unweighted.
      */
     int getWeight();
+
+    /**
+     * Check if the nodes is between the same two nodes
+     * @param other the other node to compare against
+     * @return true if the nodes is between the same nodes
+     */
+    boolean stationsMatch(Edge<T> other);
 }

@@ -165,8 +165,8 @@ class EppsteinsAlgorithmTest {
     void whenPathHasOneNode_itWillReturnTheOtherNode() {
         Set<Integer> vertices = Set.of(1, 2);
         Edge<Integer> edge = new UndirectedUnweightedColouredEdge<>(vertices, "");
-        Node<Edge<Integer>> edgeNode = new Node<>(edge, 1);
-        List<Node<Edge<Integer>>> path = List.of(edgeNode);
+        EppsteinsAlgorithmNode<Edge<Integer>> edgeNode = new EppsteinsAlgorithmNode<>(edge, 1);
+        List<EppsteinsAlgorithmNode<Edge<Integer>>> path = List.of(edgeNode);
         Integer actual = algorithm.getLastNode(path, 1).orElseThrow();
 
         assertEquals(2, actual);
@@ -174,7 +174,7 @@ class EppsteinsAlgorithmTest {
 
     @Test
     void whenPathHasZeroNodes_itWillReturnTheOtherNode() {
-        List<Node<Edge<Integer>>> path = List.of();
+        List<EppsteinsAlgorithmNode<Edge<Integer>>> path = List.of();
         assertThrows(IllegalArgumentException.class, () -> algorithm.getLastNode(path, 1));
     }
 
@@ -182,21 +182,21 @@ class EppsteinsAlgorithmTest {
     void whenPathHasMoreThanOneNode_andPathIsContinuous_itWillReturnTheLastOne() {
         Set<Integer> vertices1 = Set.of(1, 2);
         Edge<Integer> edge1 = new UndirectedUnweightedColouredEdge<>(vertices1, "");
-        Node<Edge<Integer>> edgeNode1 = new Node<>(edge1, 1);
+        EppsteinsAlgorithmNode<Edge<Integer>> edgeNode1 = new EppsteinsAlgorithmNode<>(edge1, 1);
 
         Set<Integer> vertices2 = Set.of(2, 3);
         Edge<Integer> edge2 = new UndirectedUnweightedColouredEdge<>(vertices2, "");
-        Node<Edge<Integer>> edgeNode2 = new Node<>(edge2, 1);
+        EppsteinsAlgorithmNode<Edge<Integer>> edgeNode2 = new EppsteinsAlgorithmNode<>(edge2, 1);
 
         Set<Integer> vertices3 = Set.of(4, 3);
         Edge<Integer> edge3 = new UndirectedUnweightedColouredEdge<>(vertices3, "");
-        Node<Edge<Integer>> edgeNode3 = new Node<>(edge3, 1);
+        EppsteinsAlgorithmNode<Edge<Integer>> edgeNode3 = new EppsteinsAlgorithmNode<>(edge3, 1);
 
         Set<Integer> vertices4 = Set.of(4, 5);
         Edge<Integer> edge4 = new UndirectedUnweightedColouredEdge<>(vertices4, "");
-        Node<Edge<Integer>> edgeNode4 = new Node<>(edge4, 1);
+        EppsteinsAlgorithmNode<Edge<Integer>> edgeNode4 = new EppsteinsAlgorithmNode<>(edge4, 1);
 
-        List<Node<Edge<Integer>>> path = List.of(edgeNode1, edgeNode2, edgeNode3, edgeNode4);
+        List<EppsteinsAlgorithmNode<Edge<Integer>>> path = List.of(edgeNode1, edgeNode2, edgeNode3, edgeNode4);
         Integer actual = algorithm.getLastNode(path, 1).orElse(null);
 
         assertEquals(5, actual);
@@ -206,21 +206,21 @@ class EppsteinsAlgorithmTest {
     void whenPathHasMoreThanOneNode_andPathIsNotContinuous_itWillReturnTheLastOne() {
         Set<Integer> vertices1 = Set.of(1, 2);
         Edge<Integer> edge1 = new UndirectedUnweightedColouredEdge<>(vertices1, "");
-        Node<Edge<Integer>> edgeNode1 = new Node<>(edge1, 1);
+        EppsteinsAlgorithmNode<Edge<Integer>> edgeNode1 = new EppsteinsAlgorithmNode<>(edge1, 1);
 
         Set<Integer> vertices2 = Set.of(2, 0);
         Edge<Integer> edge2 = new UndirectedUnweightedColouredEdge<>(vertices2, "");
-        Node<Edge<Integer>> edgeNode2 = new Node<>(edge2, 1);
+        EppsteinsAlgorithmNode<Edge<Integer>> edgeNode2 = new EppsteinsAlgorithmNode<>(edge2, 1);
 
         Set<Integer> vertices3 = Set.of(4, 3);
         Edge<Integer> edge3 = new UndirectedUnweightedColouredEdge<>(vertices3, "");
-        Node<Edge<Integer>> edgeNode3 = new Node<>(edge3, 1);
+        EppsteinsAlgorithmNode<Edge<Integer>> edgeNode3 = new EppsteinsAlgorithmNode<>(edge3, 1);
 
         Set<Integer> vertices4 = Set.of(4, 5);
         Edge<Integer> edge4 = new UndirectedUnweightedColouredEdge<>(vertices4, "");
-        Node<Edge<Integer>> edgeNode4 = new Node<>(edge4, 1);
+        EppsteinsAlgorithmNode<Edge<Integer>> edgeNode4 = new EppsteinsAlgorithmNode<>(edge4, 1);
 
-        List<Node<Edge<Integer>>> path = List.of(edgeNode1, edgeNode2, edgeNode3, edgeNode4);
+        List<EppsteinsAlgorithmNode<Edge<Integer>>> path = List.of(edgeNode1, edgeNode2, edgeNode3, edgeNode4);
         assertThrows(IllegalStateException.class, () -> algorithm.getLastNode(path, 1));
     }
 
@@ -228,17 +228,17 @@ class EppsteinsAlgorithmTest {
     void whenPathHasMoreThanOneNode_andPathIsALoop_itWillReturnTheLastOne() {
         Set<Integer> vertices1 = Set.of(1, 2);
         Edge<Integer> edge1 = new UndirectedUnweightedColouredEdge<>(vertices1, "");
-        Node<Edge<Integer>> edgeNode1 = new Node<>(edge1, 1);
+        EppsteinsAlgorithmNode<Edge<Integer>> edgeNode1 = new EppsteinsAlgorithmNode<>(edge1, 1);
 
         Set<Integer> vertices2 = Set.of(2, 3);
         Edge<Integer> edge2 = new UndirectedUnweightedColouredEdge<>(vertices2, "");
-        Node<Edge<Integer>> edgeNode2 = new Node<>(edge2, 1);
+        EppsteinsAlgorithmNode<Edge<Integer>> edgeNode2 = new EppsteinsAlgorithmNode<>(edge2, 1);
 
         Set<Integer> vertices3 = Set.of(1, 3);
         Edge<Integer> edge3 = new UndirectedUnweightedColouredEdge<>(vertices3, "");
-        Node<Edge<Integer>> edgeNode3 = new Node<>(edge3, 1);
+        EppsteinsAlgorithmNode<Edge<Integer>> edgeNode3 = new EppsteinsAlgorithmNode<>(edge3, 1);
 
-        List<Node<Edge<Integer>>> path = List.of(edgeNode1, edgeNode2, edgeNode3);
+        List<EppsteinsAlgorithmNode<Edge<Integer>>> path = List.of(edgeNode1, edgeNode2, edgeNode3);
 
         Integer last = algorithm.getLastNode(path, 1).orElse(null);
         assertNull(last);

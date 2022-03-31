@@ -302,7 +302,7 @@ class MetroSystemTest {
         );
         Set<List<Integer>> actualPaths = metro.getShortestPaths(29, 28);
 
-        assertEquals(actualPaths,expectedPaths);
+        assertEquals(actualPaths, expectedPaths);
     }
 
     @Test
@@ -314,7 +314,7 @@ class MetroSystemTest {
         );
         Set<List<Integer>> actualPaths = metro.getShortestPaths(31, 26);
 
-        assertEquals(actualPaths,expectedPaths);
+        assertEquals(actualPaths, expectedPaths);
     }
 
     @Test
@@ -326,7 +326,7 @@ class MetroSystemTest {
         );
         Set<List<Integer>> actualPaths = metro.getShortestPaths(30, 20);
 
-        assertEquals(actualPaths,expectedPaths);
+        assertEquals(actualPaths, expectedPaths);
     }
 
     @Test
@@ -338,7 +338,7 @@ class MetroSystemTest {
         );
         Set<List<Integer>> actualPaths = metro.getShortestPaths(65, 41);
 
-        assertEquals(actualPaths,expectedPaths);
+        assertEquals(actualPaths, expectedPaths);
     }
 
     @Test
@@ -353,6 +353,30 @@ class MetroSystemTest {
         );
         Set<List<Integer>> actualPaths = metro.getShortestPaths(25, 26);
 
-        assertEquals(actualPaths,expectedPaths);
+        assertEquals(actualPaths, expectedPaths);
+    }
+
+    @Test
+    void testFindPathsBetween_Malden_OakGrove() {
+        Set<List<Integer>> expectedPaths = Set.of(
+                List.of(
+                        2, 1
+                )
+        );
+        Set<List<Integer>> actualPaths = metro.getShortestPaths(2, 1);
+
+        assertEquals(actualPaths, expectedPaths);
+    }
+
+    @Test
+    void testFindPathsBetween_OakGrove_Riverside() {
+        Set<List<Integer>> expectedPaths = Set.of(
+                List.of(
+                        1, 2, 5, 12, 15, 20, 22, 27, 29, 31, 34, 41, 51, 47, 57, 65, 90, 91, 85, 86, 113, 114, 115, 116, 117, 118, 119
+                )
+        );
+        Set<List<Integer>> actualPaths = metro.getShortestPaths(1, 119);
+
+        assertEquals(actualPaths, expectedPaths);
     }
 }

@@ -8,8 +8,15 @@ import java.util.Objects;
  * @param <T>
  */
 class EppsteinsAlgorithmNode<T> {
-    final T value;
-    final int cost;
+    /**
+     * The value of the node
+     */
+    final private T value;
+
+    /**
+     * Cost of the node
+     */
+    final private int cost;
 
     public EppsteinsAlgorithmNode(T value, int cost) {
         this.value = value;
@@ -21,10 +28,16 @@ class EppsteinsAlgorithmNode<T> {
         return Objects.hash(value);
     }
 
+    /**
+     * @return the value of the node
+     */
     public T getValue() {
         return value;
     }
 
+    /**
+     * @return the cost of the node
+     */
     public int getCost() {
         return cost;
     }

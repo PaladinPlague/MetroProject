@@ -6,8 +6,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Panel that displays the paths between provided stations
+ */
 public class DisplayPathsPanel extends JPanel {
 
+    /**
+     * List of paths to be displayed
+     */
     Set<JList<String>> jlists;
 
     public DisplayPathsPanel() {
@@ -15,6 +21,9 @@ public class DisplayPathsPanel extends JPanel {
         build();
     }
 
+    /**
+     * Call this method to display the paths
+     */
     public void displayPaths(Set<List<String>> paths) {
         // remove previous result
         if (jlists != null) {

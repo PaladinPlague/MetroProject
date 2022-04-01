@@ -3,6 +3,9 @@ import Model.Metro;
 import View.MetroView;
 import View.UIView;
 
+/**
+ * Driver for the system. Launches the application.
+ */
 public class Driver {
     public static void main(String[] args) {
         final String FILENAME = "bostonmetro.txt";

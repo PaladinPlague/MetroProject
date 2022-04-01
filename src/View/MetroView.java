@@ -5,19 +5,10 @@ import java.util.Map;
 import java.util.Set;
 
 public interface MetroView {
-
-    // In this method you should set up and display the UI
-
     /**
-     * Call this method to run the UI
+     * Starts the ui
      */
     void start();
-
-    // With setUpOn<SomeAction> methods, we will set up callbacks to be executed
-    // when <SomeAction> happens - for example:
-    // when a button is pressed a path between two stations is calculated and
-    // displayed to the user.
-    // depending on the framework we might need to change Runnable to something else
 
     /**
      * Call this method to set up onDisplayGraph callback

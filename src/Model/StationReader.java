@@ -8,7 +8,16 @@ import java.util.*;
  * Class responsible for reading in stations from the provided file
  */
 class StationReader {
-    public static Map<Integer, String> readStations(String filename) throws NumberFormatException, IndexOutOfBoundsException, NumberFormatException {
+    /**
+     * retrieve stations from the source file
+     * @param filename the file in which the stations are stored. The file has to have structure of [station_index][whitespace][stations_name][line_colour][neighbour1_index][neighbour2_index].
+     *                 Last three parts can be repeated multiple times, but always together. If station is starting/terminal either neighbour_index must be 0.
+     * @return Map from index to station name of stations
+     * @throws NumberFormatException when file does not exist
+     * @throws IndexOutOfBoundsException when file format is incorrect
+     * @throws NumberFormatException when file format is incorrect
+     */
+    public static Map<Integer, String> readStations(String filename) throws NullPointerException, IndexOutOfBoundsException, NumberFormatException {
         Map<Integer, String> stations = new HashMap<>();
         try (Scanner scanner = new Scanner(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream(filename)))) {
             while (scanner.hasNextLine()) {
@@ -23,6 +32,15 @@ class StationReader {
         return stations;
     }
 
+    /**
+     * retrieve adjacencies between stations from the source file
+     * @param filename the file in which the stations are stored. The file has to have structure of [station_index][whitespace][stations_name][line_colour][neighbour1_index][neighbour2_index].
+     *                 Last three parts can be repeated multiple times, but always together. If station is starting/terminal either neighbour_index must be 0.
+     * @return Map from a set (pair) of indexes to a set of lines that exist between the stations
+     * @throws NumberFormatException when file does not exist
+     * @throws IndexOutOfBoundsException when file format is incorrect
+     * @throws NumberFormatException when file format is incorrect
+     */
     public static Map<Set<Integer>, Set<String>> readAdjacencies(String filename) throws NullPointerException, IndexOutOfBoundsException, NumberFormatException {
         Map<Set<Integer>, Set<String>> stations = new HashMap<>();
 

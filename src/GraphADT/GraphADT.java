@@ -2,6 +2,11 @@ package GraphADT;
 
 import java.util.Set;
 
+/**
+ * ADT representing a graph. This class can be used with different kinds of edges to allow for different type of graph kinds.
+ * @param <T> Vertex type
+ * @param <E> Edge type between vertices
+ */
 public interface GraphADT<T, E extends Edge<T>> {
 
     /**

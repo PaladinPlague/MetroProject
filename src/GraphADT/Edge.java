@@ -5,6 +5,7 @@ import java.util.List;
 /**
  * This class represents an edge in a GraphADT
  * Implementations of this class can add additional properties e.g. colouring of the edge, or direction
+ * In order to use a graph class, one should use or create an implementation of this class.
  *
  * @param <T> Type of the node that this edge connects
  */
@@ -32,13 +33,13 @@ public interface Edge<T> {
     T getOther(T node) throws IllegalArgumentException;
 
     /**
-     *
      * @return The weight of this edge. Should return 1 if the edge is unweighted.
      */
     int getWeight();
 
     /**
      * Check if the nodes is between the same two nodes
+     *
      * @param other the other node to compare against
      * @return true if the nodes is between the same nodes
      */

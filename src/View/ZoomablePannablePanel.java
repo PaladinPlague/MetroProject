@@ -8,6 +8,8 @@ import java.awt.geom.AffineTransform;
 import static java.lang.Math.min;
 
 /**
+ * Class that displays and image that can be zoomed into and panned with a mouse.
+ *
  * This class is inspired and build upon a class located at:
  * https://github.com/Thanasis1101/Zoomable-Java-Panel/blob/master/src/zoomable/panel/MainPanel.java
  *

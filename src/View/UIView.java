@@ -1,14 +1,16 @@
 package View;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.List;
+import java.util.*;
 
+/**
+ * The gui view of the metro system
+ */
 public class UIView implements MetroView {
 
     JFrame frame;

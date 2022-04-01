@@ -3,6 +3,11 @@ package GraphADT;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Path finding algorithm that finds all possible shortest paths within a graph
+ * @param <T> Node type
+ * @param <E> Edge type between nodes
+ */
 public class EppsteinsAlgorithm<T, E extends Edge<T>> implements ShortestPathsAlgorithm<T, E> {
     @Override
     public List<List<E>> searchIn(GraphADT<T, E> graph, T from, T to) {

@@ -35,7 +35,7 @@ public class MetroController implements Runnable {
 
             // start the ui
             view.start();
-        } catch (FileNotFoundException e) {
+        } catch (NullPointerException e) {
 
             System.err.println(e.getMessage());
             System.err.println(Arrays.toString(e.getStackTrace()));

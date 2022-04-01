@@ -27,7 +27,7 @@ public class UIView implements MetroView {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
 
-        BufferedImage bufferedImage = ImageIO.read(new File("boston_image.png"));
+        BufferedImage bufferedImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("boston_image.png")));
         int height = 500;
         int width = 500;
         ZoomablePannablePanel zoomable = new ZoomablePannablePanel(bufferedImage, width);
@@ -106,7 +106,7 @@ public class UIView implements MetroView {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets(20,0,0,0);
+        gridBagConstraints.insets = new Insets(20, 0, 0, 0);
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
 
@@ -133,8 +133,8 @@ public class UIView implements MetroView {
         // setup frame
         frame.add(main);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(1300,700));
-        frame.setMinimumSize(new Dimension(1300,700));
+        frame.setPreferredSize(new Dimension(1300, 700));
+        frame.setMinimumSize(new Dimension(1300, 700));
         frame.pack();
     }
 
@@ -195,7 +195,7 @@ public class UIView implements MetroView {
         JFrame popUpFrame = new JFrame("Error");
         JPanel main = new JPanel();
         JLabel text = new JLabel(input);
-        text.setForeground(new Color(255,0,0));
+        text.setForeground(new Color(255, 0, 0));
 
         main.add(text);
         popUpFrame.add(main);

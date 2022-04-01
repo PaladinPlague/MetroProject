@@ -2,3 +2,5 @@ out/
 .idea/
 
 *.ignore
+
+**/META-INF

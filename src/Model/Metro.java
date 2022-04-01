@@ -42,11 +42,11 @@ public class Metro {
     /**
      * Fills in the graph with stations from the provided file
      *
-     * @throws FileNotFoundException     when file does not exist
+     * @throws NullPointerException     when file does not exist
      * @throws IndexOutOfBoundsException when file format is incorrect
      * @throws NumberFormatException     when file format is incorrect
      */
-    public void init(String filename) throws FileNotFoundException, IndexOutOfBoundsException, IllegalArgumentException {
+    public void init(String filename) throws NullPointerException, IndexOutOfBoundsException, IllegalArgumentException {
         // read in the stations - map from index to name
         Map<Integer, String> map = StationReader.readStations(filename);
         // read in the adjacencies between stations

@@ -19,7 +19,7 @@ class MetroSystemTest {
     static Metro metro;
 
     @BeforeAll
-    static void setUpEach() throws FileNotFoundException {
+    static void setUpEach() throws NullPointerException {
         MultiGraph<Integer, UndirectedUnweightedColouredEdge<Integer>> graph = new MultiGraph<Integer, UndirectedUnweightedColouredEdge<Integer>>();
         EppsteinsAlgorithm<Integer, UndirectedUnweightedColouredEdge<Integer>> algorithm = new EppsteinsAlgorithm<Integer, UndirectedUnweightedColouredEdge<Integer>>();
         metro = new Metro(graph, algorithm);

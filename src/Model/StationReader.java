@@ -8,10 +8,9 @@ import java.util.*;
  * Class responsible for reading in stations from the provided file
  */
 class StationReader {
-    public static Map<Integer, String> readStations(String filename) throws FileNotFoundException, IndexOutOfBoundsException, NumberFormatException {
+    public static Map<Integer, String> readStations(String filename) throws NumberFormatException, IndexOutOfBoundsException, NumberFormatException {
         Map<Integer, String> stations = new HashMap<>();
-        File file = new File(filename);
-        try (Scanner scanner = new Scanner(file)) {
+        try (Scanner scanner = new Scanner(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream(filename)))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine().strip();
                 String[] data = line.split("\\s+");
@@ -24,10 +23,10 @@ class StationReader {
         return stations;
     }
 
-    public static Map<Set<Integer>, Set<String>> readAdjacencies(String filename) throws FileNotFoundException, IndexOutOfBoundsException, NumberFormatException {
+    public static Map<Set<Integer>, Set<String>> readAdjacencies(String filename) throws NullPointerException, IndexOutOfBoundsException, NumberFormatException {
         Map<Set<Integer>, Set<String>> stations = new HashMap<>();
-        File file = new File(filename);
-        try (Scanner scanner = new Scanner(file)) {
+
+        try (Scanner scanner = new Scanner(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream(filename)))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine().strip();
                 String[] data = line.split("\\s+");

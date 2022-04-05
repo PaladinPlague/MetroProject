@@ -30,11 +30,8 @@ public class ZoomablePannablePanel extends JPanel implements MouseWheelListener,
     private int xDiff;
     private int yDiff;
     private Point startPoint;
-    private boolean firstPaint;
 
     public ZoomablePannablePanel(Image image, double size) {
-
-        firstPaint = true;
 
         double height = image.getHeight(this);
         double width = image.getWidth(this);
@@ -61,17 +58,9 @@ public class ZoomablePannablePanel extends JPanel implements MouseWheelListener,
 
         Graphics2D g2 = (Graphics2D) g;
 
-        if (firstPaint) {
-            AffineTransform at = new AffineTransform();
-            at.translate(xOffset, yOffset);
-            at.scale(zoomFactor, zoomFactor);
-            g2.transform(at);
-            firstPaint = false;
-        }
+        AffineTransform at = new AffineTransform();
 
         if (isZooming) {
-            AffineTransform at = new AffineTransform();
-
             double xRel = MouseInfo.getPointerInfo().getLocation().getX() - getLocationOnScreen().getX();
             double yRel = MouseInfo.getPointerInfo().getLocation().getY() - getLocationOnScreen().getY();
 
@@ -80,25 +69,25 @@ public class ZoomablePannablePanel extends JPanel implements MouseWheelListener,
             xOffset = (zoomDiv) * (xOffset) + (1 - zoomDiv) * xRel;
             yOffset = (zoomDiv) * (yOffset) + (1 - zoomDiv) * yRel;
 
-            at.translate(xOffset, yOffset);
-            at.scale(zoomFactor, zoomFactor);
             prevZoomFactor = zoomFactor;
-            g2.transform(at);
             isZooming = false;
         }
-        else if (isDragging) {
-            AffineTransform at = new AffineTransform();
+
+        if (isDragging) {
             at.translate(xOffset + xDiff, yOffset + yDiff);
-            at.scale(zoomFactor, zoomFactor);
-            g2.transform(at);
 
             if (released) {
                 xOffset += xDiff;
                 yOffset += yDiff;
                 isDragging = false;
             }
-
         }
+        else {
+            at.translate(xOffset, yOffset);
+        }
+
+        at.scale(zoomFactor, zoomFactor);
+        g2.transform(at);
 
         // All drawings go here
         g2.drawImage(image, 0, 0, this);
@@ -153,9 +142,7 @@ public class ZoomablePannablePanel extends JPanel implements MouseWheelListener,
     @Override
     public void mouseReleased(MouseEvent e) {
         released = true;
-        if(isDragging) {
-            repaint();
-        }
+        if(isDragging) repaint();
     }
 
     @Override

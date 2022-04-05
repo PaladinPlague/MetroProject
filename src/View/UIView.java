@@ -220,8 +220,7 @@ public class UIView implements MetroView {
     public void filterStartStations(String filterString) {
         start.removeAllItems();
         fi.filter(filterString, true);
-        main.revalidate();
-        main.repaint();
+        start.repaint();
         start.showPopup();
     }
 
@@ -229,8 +228,7 @@ public class UIView implements MetroView {
     public void filterEndStations(String filterString) {
         end.removeAllItems();
         fi.filter(filterString, false);
-        main.revalidate();
-        main.repaint();
+        end.repaint();
         end.showPopup();
     }
 

@@ -98,6 +98,12 @@ public class Metro {
                 .collect(Collectors.toMap(Function.identity(), stations::get));
     }
 
+    /**
+     * Use to retrieve stations, the names of which contain a filter substring
+     *
+     * @param filterString Substring to be matched in the station's name
+     * @return Map from index to the name of station of the filtered stations
+     */
     public Map<Integer, String> filterStationsNames(String filterString) {
         return getStationsNames().entrySet().stream()
                 .filter(s -> s.getValue().toLowerCase().contains(filterString.toLowerCase()))

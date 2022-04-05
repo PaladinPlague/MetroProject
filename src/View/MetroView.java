@@ -7,10 +7,15 @@ import java.util.Set;
 public interface MetroView {
 
     /**
-     *
+     * Functional interface used to handle filtering stations
      */
     @FunctionalInterface
     interface FilterInterface {
+        /**
+         * Abstract method
+         * @param filterString Substring to be matched in the station's name
+         * @param startOrEnd when true filters the start stations and end stations when false
+         */
         void filter(String filterString, boolean startOrEnd);
     }
 
@@ -47,10 +52,23 @@ public interface MetroView {
 
     void setUpEndStations(Map<Integer, String> stations);
 
-    void setUpFilter(FilterInterface f);
+    /**
+     * Passing a lambda expression to the filter
+     *
+     * @param filterInterface filtering lambda expression
+     */
+    void setUpFilter(FilterInterface filterInterface);
 
+    /**
+     * Filter and update the start stations
+     * @param filterString Substring to be matched in the station's name
+     */
     void filterStartStations(String filterString);
 
+    /**
+     * Filter and update the end stations
+     * @param filterString Substring to be matched in the station's name
+     */
     void filterEndStations(String filterString);
 
     /**

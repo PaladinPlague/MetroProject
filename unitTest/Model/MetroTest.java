@@ -155,6 +155,40 @@ class MetroTest {
     }
 
     @Test
+    void ifFilterStationsNamesIsCalledWithAnExistingSubstring_thenItReturnsTheStationsOfWhichNamesContaintTheSubsstring() {
+        Map<Integer, String> map = Map.of(
+                1, "a",
+                2, "b",
+                3, "c",
+                4, "ad",
+                5, "ea"
+        );
+        metro.init(map, Map.of());
+        Map<Integer, String> fmap = Map.of(
+                1, "a",
+                4, "ad",
+                5, "ea"
+        );
+        Map<Integer, String> actual = metro.filterStationsNames("a");
+        assertEquals(fmap, actual);
+    }
+
+    @Test
+    void ifFilterStationsNamesIsCalledWithAMissingSubstring_thenItReturnsNull() {
+        Map<Integer, String> map = Map.of(
+                1, "a",
+                2, "b",
+                3, "c",
+                4, "ad",
+                5, "ea"
+        );
+        metro.init(map, Map.of());
+        Map<Integer, String> fmap = Map.of();
+        Map<Integer, String> actual = metro.filterStationsNames("f");
+        assertEquals(fmap, actual);
+    }
+
+    @Test
     void ifGetStationsLinesIsCalled_thenItReturnsAllStationsLines() {
         Map<Integer, String> map = Map.of(
                 1, "a",

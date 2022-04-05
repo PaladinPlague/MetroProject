@@ -36,7 +36,7 @@ public class UIView implements MetroView {
         BufferedImage bufferedImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("boston_image.png")));
         int height = 500;
         int width = 500;
-        ZoomablePannablePanel zoomable = new ZoomablePannablePanel(bufferedImage, width, 0.15, 1);
+        ZoomablePannablePanel zoomable = new ZoomablePannablePanel(bufferedImage, width);
         zoomable.setPreferredSize(new Dimension(width, height));
         zoomable.setMinimumSize(new Dimension(width, height));
 

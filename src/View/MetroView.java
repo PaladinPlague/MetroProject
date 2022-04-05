@@ -5,6 +5,15 @@ import java.util.Map;
 import java.util.Set;
 
 public interface MetroView {
+
+    /**
+     *
+     */
+    @FunctionalInterface
+    interface FilterInterface {
+        void filter(String filterString, boolean startOrEnd);
+    }
+
     /**
      * Starts the ui
      */
@@ -35,6 +44,16 @@ public interface MetroView {
     // Getter methods - you call these to get the values from the UI
 
     void setUpStations(Map<Integer, String> stations);
+
+    void setUpStartStations(Map<Integer, String> stations);
+
+    void setUpEndStations(Map<Integer, String> stations);
+
+    void setUpFilter(FilterInterface f);
+
+    void filterStartStations(String filterString);
+
+    void filterEndStations(String filterString);
 
     /**
      * Call to get two stations that should be passed to the backend to find path between

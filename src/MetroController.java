@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class MetroController implements Runnable {
+public class        MetroController implements Runnable {
     final MetroView view;
     final Metro metro;
     final String sourcePath;
@@ -71,7 +71,7 @@ public class MetroController implements Runnable {
     private void setUpView() {
         view.setUpOnFindPath(() -> {
             Integer[] stations = view.getStationsForPathFinding();
-            if (stations.length != 2) {
+            if (stations == null || stations.length != 2) {
                 view.alert("Please provide the names of the stations.");
             } else {
                 try {
@@ -96,5 +96,13 @@ public class MetroController implements Runnable {
         });
 
         view.setUpStations(metro.getStationsNames());
+        view.setUpFilter( (s, b) -> {
+            if(b) {
+                view.setUpStartStations(metro.filterStationsNames(s));
+            }
+            else {
+                view.setUpEndStations(metro.filterStationsNames(s));
+            }
+        });
     }
 }

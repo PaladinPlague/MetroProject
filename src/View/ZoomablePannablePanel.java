@@ -31,8 +31,10 @@ public class ZoomablePannablePanel extends JPanel implements MouseWheelListener,
     private int yDiff;
     private Point startPoint;
     private boolean firstPaint;
+    private final double minZoomFactor;
+    private final double maxZoomFactor;
 
-    public ZoomablePannablePanel(Image image, double size) {
+    public ZoomablePannablePanel(Image image, double size, double minZoom, double maxZoom) {
 
         firstPaint = true;
 
@@ -44,7 +46,11 @@ public class ZoomablePannablePanel extends JPanel implements MouseWheelListener,
         prevZoomFactor = size / minimum;
         zoomFactor = prevZoomFactor;
 
+        minZoomFactor = minZoom;
+        maxZoomFactor = maxZoom;
+
         this.image = image;
+        this.setBackground(Color.white);
         initComponent();
     }
 
@@ -101,7 +107,6 @@ public class ZoomablePannablePanel extends JPanel implements MouseWheelListener,
         }
 
         // All drawings go here
-
         g2.drawImage(image, 0, 0, this);
 
     }
@@ -112,12 +117,12 @@ public class ZoomablePannablePanel extends JPanel implements MouseWheelListener,
         isZooming = true;
 
         //Zoom in
-        if (e.getWheelRotation() < 0) {
+        if (e.getWheelRotation() < 0 && zoomFactor < maxZoomFactor) {
             zoomFactor *= 1.1;
             repaint();
         }
         //Zoom out
-        if (e.getWheelRotation() > 0) {
+        if (e.getWheelRotation() > 0 && zoomFactor > minZoomFactor) {
             zoomFactor /= 1.1;
             repaint();
         }

@@ -98,6 +98,12 @@ public class Metro {
                 .collect(Collectors.toMap(Function.identity(), stations::get));
     }
 
+    public Map<Integer, String> filterStationsNames(String filterString) {
+        return getStationsNames().entrySet().stream()
+                .filter(s -> s.getValue().toLowerCase().contains(filterString.toLowerCase()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
     /**
      * Use to retrieve lines of all the stations in the system
      *

@@ -3,6 +3,8 @@ package View;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
@@ -14,11 +16,13 @@ import java.util.*;
 public class UIView implements MetroView {
 
     JFrame frame;
-    JButton findPathButton;
+    JTextField startField, endField;
+    JButton filterButton, findPathButton;
     JPanel main;
     DisplayPathsPanel displayPathsPanel;
     JComboBox<Map.Entry<Integer, String>> start, end;
     Map<String, Runnable> commands;
+    FilterInterface fi;
 
     public UIView() {
         commands = new HashMap<>();
@@ -32,7 +36,7 @@ public class UIView implements MetroView {
         BufferedImage bufferedImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("boston_image.png")));
         int height = 500;
         int width = 500;
-        ZoomablePannablePanel zoomable = new ZoomablePannablePanel(bufferedImage, width);
+        ZoomablePannablePanel zoomable = new ZoomablePannablePanel(bufferedImage, width, 0.15, 1);
         zoomable.setPreferredSize(new Dimension(width, height));
         zoomable.setMinimumSize(new Dimension(width, height));
 
@@ -60,6 +64,11 @@ public class UIView implements MetroView {
     }
 
     private void buildDropDowns() {
+        startField = new JTextField();
+        startField.setPreferredSize(new Dimension(250, 20));
+        endField = new JTextField();
+        endField.setPreferredSize(new Dimension(250, 20));
+
         start = new JComboBox<>();
         end = new JComboBox<>();
 
@@ -68,23 +77,49 @@ public class UIView implements MetroView {
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.insets = new Insets(0, 0, 0, 10);
         gridBagConstraints.ipady = 20;
+
+        startField.addActionListener(e -> filterStartStations(startField.getText()));
+
+        endField.addActionListener(e -> filterEndStations(endField.getText()));
+
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridx = 1;
+
+        main.add(startField, gridBagConstraints);
+
+        gridBagConstraints.gridx = 2;
+        main.add(endField, gridBagConstraints);
+
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 1;
+
         main.add(start, gridBagConstraints);
 
         gridBagConstraints.gridx = 2;
         main.add(end, gridBagConstraints);
     }
 
-    private void buildButton() {
-        // initialise submit button
-        findPathButton = new JButton("Find Path");
+    private void buildButtons() {
+        //initialise filter button
+        filterButton = new JButton("Filter");
+        filterButton.addActionListener(e -> {
+            filterStartStations(startField.getText());
+            filterEndStations(endField.getText());
+            end.hidePopup();
+        });
 
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
 
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
+        // add submit button
+        main.add(filterButton, gridBagConstraints);
+
+        // initialise submit button
+        findPathButton = new JButton("Find Path");
+
+        gridBagConstraints.gridy = 2;
         // add submit button
         main.add(findPathButton, gridBagConstraints);
     }
@@ -94,10 +129,10 @@ public class UIView implements MetroView {
 
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-
+        gridBagConstraints.insets = new Insets(-360, 0, 0, 0);
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         // add submit button
         main.add(displayPathsPanel, gridBagConstraints);
 
@@ -108,9 +143,9 @@ public class UIView implements MetroView {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets(20, 0, 0, 0);
+        gridBagConstraints.insets = new Insets(-360, 0, 0, 0);
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
 
         main.add(pathFindingLabel, gridBagConstraints);
     }
@@ -128,7 +163,7 @@ public class UIView implements MetroView {
 
         buildLabels();
         buildDropDowns();
-        buildButton();
+        buildButtons();
         buildPathFindingLabel();
         buildDisplayPathPanel();
 
@@ -162,19 +197,56 @@ public class UIView implements MetroView {
 
     @Override
     public void setUpStations(Map<Integer, String> stations) {
+        setUpStartStations(stations);
+        setUpEndStations(stations);
+    }
+
+    @Override
+    public void setUpStartStations(Map<Integer, String> stations) {
         stations.entrySet().forEach(start::addItem);
+    }
+
+    @Override
+    public void setUpEndStations(Map<Integer, String> stations) {
         stations.entrySet().forEach(end::addItem);
+    }
+
+    @Override
+    public void setUpFilter(FilterInterface filterInterface) {
+        fi = filterInterface;
+    }
+
+    @Override
+    public void filterStartStations(String filterString) {
+        start.removeAllItems();
+        fi.filter(filterString, true);
+        main.revalidate();
+        main.repaint();
+        start.showPopup();
+    }
+
+    @Override
+    public void filterEndStations(String filterString) {
+        end.removeAllItems();
+        fi.filter(filterString, false);
+        main.revalidate();
+        main.repaint();
+        end.showPopup();
     }
 
     @Override
     public Integer[] getStationsForPathFinding() {
         Map.Entry<Integer, String> from = start.getItemAt(start.getSelectedIndex());
-        int startText = from.getKey();
+        if(from != null) {
+            int startText = from.getKey();
 
-        Map.Entry<Integer, String> to = end.getItemAt(end.getSelectedIndex());
-        int endText = to.getKey();
-
-        return new Integer[]{startText, endText};
+            Map.Entry<Integer, String> to = end.getItemAt(end.getSelectedIndex());
+            if(to != null) {
+                int endText = to.getKey();
+                return new Integer[]{startText, endText};
+            }
+        }
+        return null;
     }
 
     @Override

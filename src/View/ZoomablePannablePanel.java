@@ -86,8 +86,7 @@ public class ZoomablePannablePanel extends JPanel implements MouseWheelListener,
             g2.transform(at);
             isZooming = false;
         }
-
-        if (isDragging) {
+        else if (isDragging) {
             AffineTransform at = new AffineTransform();
             at.translate(xOffset + xDiff, yOffset + yDiff);
             at.scale(zoomFactor, zoomFactor);
@@ -154,7 +153,9 @@ public class ZoomablePannablePanel extends JPanel implements MouseWheelListener,
     @Override
     public void mouseReleased(MouseEvent e) {
         released = true;
-        repaint();
+        if(isDragging) {
+            repaint();
+        }
     }
 
     @Override

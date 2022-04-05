@@ -41,8 +41,6 @@ public interface MetroView {
      */
     void setUpOnGetLines(Runnable onGetLine);
 
-    // Getter methods - you call these to get the values from the UI
-
     void setUpStations(Map<Integer, String> stations);
 
     void setUpStartStations(Map<Integer, String> stations);
